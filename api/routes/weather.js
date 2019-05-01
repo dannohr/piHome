@@ -1,16 +1,9 @@
 var express = require("express");
 var router = express.Router();
 
-import { current_weather } from "../controller/weather";
+var weatherCtrl = require("../controller/weatherCtrl");
 
-router.get("/auth", authCtrlQb.auth);
-router.get("/callback", authCtrlQb.callback);
-router.get("/refresh", authCtrlQb.refresh);
-router.get("/revoke", authCtrlQb.revoke);
-
-router.get("/company", compCtrlQb.list);
-
-router.get("/customer", custCtrlQb.list);
-router.get("/customer/:id", custCtrlQb.getById);
+router.get("/current", weatherCtrl.current_weather);
+router.get("/forecast", weatherCtrl.weather_forecast);
 
 module.exports = router;
