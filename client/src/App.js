@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import WeatherWidget from "./components/weather/WeatherWidget";
+import CurrentWeather from "./components/weather/CurrentWeather";
 
 import "./App.css";
 
@@ -8,7 +8,7 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <WeatherWidget />
+          <CurrentWeather />
         </header>
       </div>
     );

@@ -1,11 +1,6 @@
 import React from "react";
 import Weather from "./Weather";
 import Form from "./Form";
-// import SWeather from "./components/stateless_weather";
-// import SForm from "./components/stateless_form"
-import Titles from "./Titles";
-
-const Api_Key = process.env.REACT_APP_WEATHER_API_KEY;
 
 class WeatherWidget extends React.Component {
   state = {
@@ -44,28 +39,15 @@ class WeatherWidget extends React.Component {
   render() {
     return (
       <div>
-        <div className="wrapper">
-          <div className="main">
-            <div className="container">
-              <div className="row">
-                <div className="col-xs-5 title-container">
-                  <Titles />
-                </div>
-                <div className="col-xs-7 form-container">
-                  <Form loadWeather={this.getWeather} />
-                  <Weather
-                    temperature={this.state.temperature}
-                    city={this.state.city}
-                    country={this.state.country}
-                    humidity={this.state.humidity}
-                    description={this.state.description}
-                    error={this.state.error}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <Form loadWeather={this.getWeather} />
+        <Weather
+          temperature={this.state.temperature}
+          city={this.state.city}
+          country={this.state.country}
+          humidity={this.state.humidity}
+          description={this.state.description}
+          error={this.state.error}
+        />
       </div>
     );
   }

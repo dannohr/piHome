@@ -23,7 +23,11 @@ module.exports = {
     axios
       .get(url)
       .then(response => {
-        console.log(response);
+        console.log(response.data);
+
+        let testTime = response.data.dt;
+        console.log(moment(testTime).format("dddd, MMMM Do YYYY, h:mm:ss a"));
+
         res.status(200).send(response.data);
       })
       .catch(err => {
