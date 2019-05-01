@@ -15,10 +15,10 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
+// app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/thermostat", thermoRouter);
-app.use("/weather", weatherRouter);
+app.use("/api/thermostat", thermoRouter);
+app.use("/api/weather", weatherRouter);
 
 app.listen(port, () => {
   console.log("Express server listening on port " + port);
