@@ -4,7 +4,8 @@ import moment from "moment";
 
 class CurrentWeather extends React.Component {
   state = {
-    temperature: undefined,
+    outsideTemp: undefined,
+    insideTemp: 6,
     city: undefined,
     country: undefined,
     humidity: undefined,
@@ -14,13 +15,15 @@ class CurrentWeather extends React.Component {
   };
 
   componentWillMount() {
-    this.handleGetCurrentWeather();
+    // this.handleGetCurrentWeather();
+    // this.handleGetCurrentThermostatStatus();
   }
 
   componentDidMount() {
     this.interval = setInterval(
       () => {
         this.handleGetCurrentWeather();
+        this.handleGetCurrentThermostatStatus();
       },
       60000 // refresh every 60 seconds
     );
@@ -36,7 +39,7 @@ class CurrentWeather extends React.Component {
         let currentTime = moment(new Date()).format("MMMM Do YYYY, h:mm a");
         console.log(currentTime);
         this.setState({
-          temperature: response.data.main.temp,
+          outsideTemp: response.data.main.temp,
           city: response.data.name,
           country: response.data.sys.country,
           humidity: response.data.main.humidity + "%",
@@ -51,16 +54,41 @@ class CurrentWeather extends React.Component {
       });
   }
 
+  handleGetCurrentThermostatStatus() {
+    axios
+      .get("/api/thermostat/status")
+      .then(response => {
+        this.setState({
+          insideTemp: response.data.temp
+        });
+        console.log(this.state);
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+  }
+
   render() {
     return (
       <div>
         <div className="weather-info">
-          {this.state.temperature && (
+          {this.state.outsideTemp && (
             <p className="weather__key">
-              Temperature:
+              Outside Temp:
               <span className="weather__value">
                 {" "}
-                {Math.round(this.state.temperature)}
+                {Math.round(this.state.outsideTemp)}
+                &deg;F
+              </span>
+            </p>
+          )}
+
+          {this.state.insideTemp && (
+            <p className="weather__key">
+              Inside Temp:
+              <span className="weather__value">
+                {" "}
+                {Math.round(this.state.insideTemp)}
                 &deg;F
               </span>
             </p>
