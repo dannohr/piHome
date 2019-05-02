@@ -22,7 +22,8 @@ let settings = {
   colorTheme: "light",
   isTransparent: false,
   displayMode: "adaptive",
-  locale: "en"
+  locale: "en",
+  autoSize: "on"
 };
 
 export default class Tabsshow extends React.PureComponent {
@@ -31,13 +32,6 @@ export default class Tabsshow extends React.PureComponent {
     this._ref = React.createRef();
   }
 
-  render() {
-    return (
-      <div className="tradingview-widget-container" ref={this._ref}>
-        <div className="tradingview-widget-container__widget" />
-      </div>
-    );
-  }
   componentDidMount() {
     var jsonSettings = JSON.stringify(settings);
 
@@ -47,5 +41,12 @@ export default class Tabsshow extends React.PureComponent {
     script.async = true;
     script.innerHTML = jsonSettings;
     this._ref.current.appendChild(script);
+  }
+  render() {
+    return (
+      <div className="tradingview-widget-container" ref={this._ref}>
+        <div className="tradingview-widget-container__widget" />
+      </div>
+    );
   }
 }

@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import CurrentWeather from "./components/weather/CurrentWeather";
-// import StockTicker from "./components/StockTicker/StockTicker";
-import Ticker from "./components/StockTicker/Ticker";
+import Ticker from "./components/Ticker/Ticker";
 
 import "./App.css";
 
@@ -14,7 +13,6 @@ class App extends Component {
         </header>
         <div className="Footer">
           <Ticker />
-          {/* <StockTicker /> */}
         </div>
       </div>
     );

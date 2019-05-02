@@ -1,0 +1,9 @@
+.WeatherRow {
+  margin: 0px;
+  font-size: 30pt;
+  padding-bottom: 20px;
+}
+
+.WeatherInfo {
+  padding-top: 15px;
+}

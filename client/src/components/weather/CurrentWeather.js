@@ -2,6 +2,8 @@ import React from "react";
 import axios from "axios";
 import moment from "moment";
 
+import "./CurrentWeather.css";
+
 class CurrentWeather extends React.Component {
   state = {
     outsideTemp: undefined,
@@ -71,11 +73,11 @@ class CurrentWeather extends React.Component {
   render() {
     return (
       <div>
-        <div className="weather-info">
+        <div className="WeatherInfo">
           {this.state.outsideTemp && (
-            <p className="weather__key">
+            <p className="WeatherRow">
               Outside Temp:
-              <span className="weather__value">
+              <span>
                 {" "}
                 {Math.round(this.state.outsideTemp)}
                 &deg;F
@@ -84,9 +86,9 @@ class CurrentWeather extends React.Component {
           )}
 
           {this.state.insideTemp && (
-            <p className="weather__key">
+            <p className="WeatherRow">
               Inside Temp:
-              <span className="weather__value">
+              <span>
                 {" "}
                 {Math.round(this.state.insideTemp)}
                 &deg;F
@@ -95,36 +97,33 @@ class CurrentWeather extends React.Component {
           )}
 
           {this.state.time && (
-            <p className="weather__key">
+            <p className="WeatherRow">
               Current Time:
-              <span className="weather__value">{this.state.time}</span>
+              <span>{this.state.time}</span>
             </p>
           )}
 
           {this.state.humidity && (
-            <p className="weather__key">
+            <p className="WeatherRow">
               Humidity:
-              <span className="weather__value"> {this.state.humidity}</span>
+              <span> {this.state.humidity}</span>
             </p>
           )}
 
           {this.state.description && (
-            <p className="weather__key">
+            <p className="WeatherRow">
               Conditions:
-              <span className="weather__value"> {this.state.description}</span>
+              <span> {this.state.description}</span>
             </p>
           )}
 
           {this.state.asOf && (
-            <p className="weather__key">
-              As of:
-              <span className="weather__value"> {this.state.asOf}</span>
+            <p className="WeatherRow">
+              <span> {this.state.asOf}</span>
             </p>
           )}
 
-          {this.state.error && (
-            <p className="weather__error">{this.state.error}</p>
-          )}
+          {this.state.error && <p>{this.state.error}</p>}
         </div>
       </div>
     );
