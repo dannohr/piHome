@@ -7,7 +7,7 @@ body {
   text-align: center;
   background-color: #282c34;
   color: white;
-  height: calc(100vh - 82px);
+  height: calc(100vh - 54px);
   margin: 0px;
   border: 2px solid lightsteelblue;
 
@@ -22,7 +22,7 @@ body {
 }
 
 .Footer {
-  height: 78px;
+  height: 50px;
   position: absolute;
   left: 0;
   bottom: 0;

@@ -21,7 +21,7 @@ let settings = {
   ],
   colorTheme: "light",
   isTransparent: false,
-  displayMode: "adaptive",
+  displayMode: "regular",
   locale: "en",
   autoSize: "on"
 };
