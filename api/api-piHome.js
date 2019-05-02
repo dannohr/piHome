@@ -7,6 +7,7 @@ require("dotenv").config();
 
 const weatherRouter = require("./routes/weather");
 const thermoRouter = require("./routes/thermostat");
+const stocksRouter = require("./routes/stocks");
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -19,6 +20,7 @@ app.use(cookieParser());
 
 app.use("/api/thermostat", thermoRouter);
 app.use("/api/weather", weatherRouter);
+app.use("/api/stocks", stocksRouter);
 
 app.listen(port, () => {
   console.log("Express server listening on port " + port);

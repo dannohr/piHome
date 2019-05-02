@@ -15,8 +15,8 @@ class CurrentWeather extends React.Component {
   };
 
   componentWillMount() {
-    // this.handleGetCurrentWeather();
-    // this.handleGetCurrentThermostatStatus();
+    this.handleGetCurrentWeather();
+    this.handleGetCurrentThermostatStatus();
   }
 
   componentDidMount() {

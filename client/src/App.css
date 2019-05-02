@@ -5,19 +5,24 @@ body {
 
 .App {
   text-align: center;
-}
-
-.App-header {
   background-color: #282c34;
+  color: white;
+  height: calc(100vh - 0px);
+  margin: 0px;
+  /* border: 10px solid lightsteelblue; */
+  /* border-radius: 10px; */
+
+  /*flex-direction: column;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
-  margin: 0px;
-  height: calc(100vh - 0px);
-  border: 10px solid lightsteelblue;
-  border-radius: 10px;
-  box-sizing: border-box;
+  box-sizing: border-box; */
+}
+
+.Footer {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  right: 0;
 }
