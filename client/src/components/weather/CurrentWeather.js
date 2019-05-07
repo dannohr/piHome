@@ -117,12 +117,6 @@ class CurrentWeather extends React.Component {
             </p>
           )}
 
-          {this.state.asOf && (
-            <p className="WeatherRow">
-              <span> {this.state.asOf}</span>
-            </p>
-          )}
-
           {this.state.error && <p>{this.state.error}</p>}
         </div>
       </div>
