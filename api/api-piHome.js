@@ -4,6 +4,7 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const sqlite3 = require("sqlite3").verbose();
 require("dotenv").config();
+const db = require("./models/index");
 
 const weatherRouter = require("./routes/weather");
 const thermoRouter = require("./routes/thermostat");

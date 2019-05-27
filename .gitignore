@@ -2,14 +2,14 @@
 
 # dependencies
 /api/node_modules
-/api/.env
 /client/node_modules
+/api/.env
 
 
 # testing
 /coverage
 
 # production
-/build
+/client/build
 
-api/.env
+

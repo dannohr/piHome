@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import CurrentWeather from "./components/Weather/CurrentWeather";
-import MenuButtons from "./components/MenuButton/MenuButtons";
+import Header from "./components/Header/Header";
 import Ticker from "./components/Ticker/Ticker";
 
 import "./App.css";
@@ -9,8 +9,10 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <MenuButtons />
-        <CurrentWeather />
+        <Header />
+        <div className="Main">
+          <CurrentWeather />
+        </div>
 
         <div className="Footer">
           <Ticker />

@@ -2,8 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
-import Button from "@material-ui/core/Button";
 import List from "@material-ui/core/List";
+import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -12,6 +12,9 @@ import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
+// import BurgerButton from "./BurgerButton";
+
+import "./MenuButtons.css";
 
 const styles = {
   list: {
@@ -28,8 +31,9 @@ class MenuButtons extends React.Component {
   };
 
   toggleDrawer = (side, open) => () => {
+    console.log(this.state);
     this.setState({
-      [side]: open
+      left: open
     });
   };
 
@@ -64,14 +68,15 @@ class MenuButtons extends React.Component {
 
     return (
       <div>
-        <IconButton
+        <Button
+          variant="contained"
+          color="primary"
+          className={classes.button}
+          size="large"
           onClick={this.toggleDrawer("left", true)}
-          className={classes.menuButton}
-          color="inherit"
-          aria-label="Menu"
         >
-          <MenuIcon />
-        </IconButton>
+          MENU
+        </Button>
 
         <Drawer
           open={this.state.left}
