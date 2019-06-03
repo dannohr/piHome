@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import CurrentWeather from "./components/Weather1/CurrentWeather";
+import CurrentWeather from "./components/Weather/CurrentWeather";
 import Header from "./components/Header/Header";
 import Ticker from "./components/Ticker/Ticker";
 
