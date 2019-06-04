@@ -1,4 +1,5 @@
 import React from "react";
+import { Link as RouterLink } from "react-router-dom";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
@@ -8,6 +9,7 @@ import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
 import Typography from "@material-ui/core/Typography";
 import ListItemText from "@material-ui/core/ListItemText";
+import Link from "@material-ui/core/Link";
 
 import "./MenuButtons.css";
 
@@ -44,39 +46,92 @@ class MenuButtons extends React.Component {
     const sideList = (
       <div className={classes.list}>
         <List>
-          {["  ", "Weather", "Calendar", "Recipes"].map((text, index) => (
-            <ListItem button key={text}>
+          <Link>
+            <ListItem button key="0">
               <ListItemText
                 primary={
                   <Typography variant="h6" style={menuItemStyle}>
-                    {text}
+                    Weather
                   </Typography>
                 }
               />
             </ListItem>
-          ))}
+          </Link>
+
+          <Link>
+            <ListItem button key="1">
+              <ListItemText
+                primary={
+                  <Typography variant="h6" style={menuItemStyle}>
+                    Calendar
+                  </Typography>
+                }
+              />
+            </ListItem>
+          </Link>
+
+          <Link>
+            <ListItem button key="2">
+              <ListItemText
+                primary={
+                  <Typography variant="h6" style={menuItemStyle}>
+                    Recipes
+                  </Typography>
+                }
+              />
+            </ListItem>
+          </Link>
         </List>
         <Divider />
         <List>
-          {[
-            "Thermostat",
-            "Cabinet Lights",
-            "Wifi Outlet 1",
-            "Wifi Outlet 2"
-          ].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemText
-                primary={
-                  <Typography
-                    // variant="h6"
-                    style={menuItemStyle}
-                  >
-                    {text}
-                  </Typography>
-                }
-              />
-            </ListItem>
-          ))}
+          <ListItem button key="3">
+            <ListItemText
+              primary={
+                <Typography
+                  // variant="h6"
+                  style={menuItemStyle}
+                >
+                  Thermostat
+                </Typography>
+              }
+            />
+          </ListItem>
+          <ListItem button key="4">
+            <ListItemText
+              primary={
+                <Typography
+                  // variant="h6"
+                  style={menuItemStyle}
+                >
+                  Cabinet Lights
+                </Typography>
+              }
+            />
+          </ListItem>
+          <ListItem button key="5">
+            <ListItemText
+              primary={
+                <Typography
+                  // variant="h6"
+                  style={menuItemStyle}
+                >
+                  Wifi Outlet 1
+                </Typography>
+              }
+            />
+          </ListItem>
+          <ListItem button key="6">
+            <ListItemText
+              primary={
+                <Typography
+                  // variant="h6"
+                  style={menuItemStyle}
+                >
+                  Wifi Outlet 2
+                </Typography>
+              }
+            />
+          </ListItem>
         </List>
       </div>
     );
