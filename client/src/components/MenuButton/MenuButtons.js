@@ -6,13 +6,8 @@ import List from "@material-ui/core/List";
 import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
+import Typography from "@material-ui/core/Typography";
 import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-// import BurgerButton from "./BurgerButton";
 
 import "./MenuButtons.css";
 
@@ -23,6 +18,12 @@ const styles = {
   fullList: {
     width: "auto"
   }
+};
+
+const menuItemStyle = {
+  color: "#ff6f00",
+  textAlign: "right",
+  fontSize: "25px"
 };
 
 class MenuButtons extends React.Component {
@@ -43,23 +44,37 @@ class MenuButtons extends React.Component {
     const sideList = (
       <div className={classes.list}>
         <List>
-          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
+          {["  ", "Weather", "Calendar", "Recipes"].map((text, index) => (
             <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemText
+                primary={
+                  <Typography variant="h6" style={menuItemStyle}>
+                    {text}
+                  </Typography>
+                }
+              />
             </ListItem>
           ))}
         </List>
         <Divider />
         <List>
-          {["All mail", "Trash", "Spam"].map((text, index) => (
+          {[
+            "Thermostat",
+            "Cabinet Lights",
+            "Wifi Outlet 1",
+            "Wifi Outlet 2"
+          ].map((text, index) => (
             <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemText
+                primary={
+                  <Typography
+                    // variant="h6"
+                    style={menuItemStyle}
+                  >
+                    {text}
+                  </Typography>
+                }
+              />
             </ListItem>
           ))}
         </List>
