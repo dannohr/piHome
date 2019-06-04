@@ -1,5 +1,5 @@
 import React from "react";
-import MenuButtons from "../MenuButton/MenuButtons";
+import Nav from "../Nav/Nav";
 import RefreshButton from "../RefreshButton/RefreshButton";
 
 import "./Header.css";
@@ -16,7 +16,7 @@ class Header extends React.Component {
               </td>
               <td className="d2">{this.props.headerTitle}</td>
               <td className="d3">
-                <MenuButtons />
+                <Nav />
               </td>
             </tr>
           </thead>

@@ -17,21 +17,39 @@ class CurrentWeather extends React.Component {
   };
 
   componentWillMount() {
-    this.handleGetCurrentWeather();
-    this.handleGetCurrentThermostatStatus();
+    // // load current data
+    // this.handleGetCurrentWeather();
+    // this.handleGetCurrentThermostatStatus();
+    // // set interval to update every minute
+    // this.interval = setInterval(
+    //   () => {
+    //     this.handleGetCurrentWeather();
+    //     this.handleGetCurrentThermostatStatus();
+    //     console.log("Updated Weather Info");
+    //   },
+    //   60000 // refresh every 60 seconds
+    // );
   }
 
   componentDidMount() {
+    // load current data
+    this.handleGetCurrentWeather();
+    this.handleGetCurrentThermostatStatus();
+
+    // set interval to update every minute
     this.interval = setInterval(
       () => {
         this.handleGetCurrentWeather();
         this.handleGetCurrentThermostatStatus();
+        console.log("Updated Weather Info");
       },
       60000 // refresh every 60 seconds
     );
   }
+
   componentWillUnmount() {
     clearInterval(this.interval);
+    console.log("stopped interval");
   }
 
   handleGetCurrentWeather() {
@@ -39,7 +57,6 @@ class CurrentWeather extends React.Component {
       .get("/api/weather/current")
       .then(response => {
         let currentTime = moment(new Date()).format("MMMM Do YYYY, h:mm a");
-        console.log(currentTime);
         this.setState({
           outsideTemp: response.data.main.temp,
           city: response.data.name,
@@ -49,7 +66,6 @@ class CurrentWeather extends React.Component {
           asOf: currentTime,
           error: ""
         });
-        console.log(this.state);
       })
       .catch(function(error) {
         console.log(error);
@@ -63,7 +79,6 @@ class CurrentWeather extends React.Component {
         this.setState({
           insideTemp: response.data.temp
         });
-        console.log(this.state);
       })
       .catch(function(error) {
         console.log(error);

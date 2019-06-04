@@ -11,7 +11,7 @@ import Typography from "@material-ui/core/Typography";
 import ListItemText from "@material-ui/core/ListItemText";
 import Link from "@material-ui/core/Link";
 
-import "./MenuButtons.css";
+import "./Nav.css";
 
 const styles = {
   list: {
@@ -34,7 +34,6 @@ class MenuButtons extends React.Component {
   };
 
   toggleDrawer = (side, open) => () => {
-    console.log(this.state);
     this.setState({
       left: open
     });
@@ -46,7 +45,7 @@ class MenuButtons extends React.Component {
     const sideList = (
       <div className={classes.list}>
         <List>
-          <Link>
+          <Link component={RouterLink} to="/">
             <ListItem button key="0">
               <ListItemText
                 primary={
@@ -58,7 +57,7 @@ class MenuButtons extends React.Component {
             </ListItem>
           </Link>
 
-          <Link>
+          <Link component={RouterLink} to="/calendar">
             <ListItem button key="1">
               <ListItemText
                 primary={
@@ -70,7 +69,7 @@ class MenuButtons extends React.Component {
             </ListItem>
           </Link>
 
-          <Link>
+          <Link component={RouterLink} to="/recipes">
             <ListItem button key="2">
               <ListItemText
                 primary={
@@ -83,55 +82,47 @@ class MenuButtons extends React.Component {
           </Link>
         </List>
         <Divider />
+
         <List>
-          <ListItem button key="3">
-            <ListItemText
-              primary={
-                <Typography
-                  // variant="h6"
-                  style={menuItemStyle}
-                >
-                  Thermostat
-                </Typography>
-              }
-            />
-          </ListItem>
-          <ListItem button key="4">
-            <ListItemText
-              primary={
-                <Typography
-                  // variant="h6"
-                  style={menuItemStyle}
-                >
-                  Cabinet Lights
-                </Typography>
-              }
-            />
-          </ListItem>
-          <ListItem button key="5">
-            <ListItemText
-              primary={
-                <Typography
-                  // variant="h6"
-                  style={menuItemStyle}
-                >
-                  Wifi Outlet 1
-                </Typography>
-              }
-            />
-          </ListItem>
-          <ListItem button key="6">
-            <ListItemText
-              primary={
-                <Typography
-                  // variant="h6"
-                  style={menuItemStyle}
-                >
-                  Wifi Outlet 2
-                </Typography>
-              }
-            />
-          </ListItem>
+          <Link component={RouterLink} to="/thermostat">
+            <ListItem button key="3">
+              <ListItemText
+                primary={
+                  <Typography style={menuItemStyle}>Thermostat</Typography>
+                }
+              />
+            </ListItem>
+          </Link>
+
+          <Link component={RouterLink} to="/cabinetlights">
+            <ListItem button key="4">
+              <ListItemText
+                primary={
+                  <Typography style={menuItemStyle}>Cabinet Lights</Typography>
+                }
+              />
+            </ListItem>
+          </Link>
+
+          <Link component={RouterLink} to="/outlet1">
+            <ListItem button key="5">
+              <ListItemText
+                primary={
+                  <Typography style={menuItemStyle}>Wifi Outlet 1</Typography>
+                }
+              />
+            </ListItem>
+          </Link>
+
+          <Link component={RouterLink} to="/outlet2">
+            <ListItem button key="6">
+              <ListItemText
+                primary={
+                  <Typography style={menuItemStyle}>Wifi Outlet 2</Typography>
+                }
+              />
+            </ListItem>
+          </Link>
         </List>
       </div>
     );

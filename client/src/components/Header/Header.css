@@ -7,8 +7,8 @@ table {
 }
 td {
   vertical-align: center;
-  /* border-style: solid;
-  border-color: blue; */
+  border-style: solid;
+  border-color: blue;
 }
 .d1 {
   text-align: left;
