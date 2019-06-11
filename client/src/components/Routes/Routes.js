@@ -11,7 +11,7 @@ import NotFound from "../NotFound/NotFound";
 export default ({ childProps }) => (
   // <Router>
   <Switch>
-    <Route exact path="/" component={CurrentWeather} />
+    <Route exact path="/" component={FancyCalendar} />
     <Route path="/recipes" component={Recipes} />
     <Route path="/thermostat" component={Thermostat} />
     <Route path="/calendar" component={FancyCalendar} />

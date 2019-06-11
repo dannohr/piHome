@@ -9,22 +9,29 @@ import "./App.css";
 
 class App extends Component {
   state = {
-    headerTitle: "Current Weather"
+    headerTitle: "Current Weather",
+    showTicker: false,
+    showHeader: false
   };
 
   render() {
     return (
       <div className="App">
-        <div className="Header">
-          <Header headerTitle={this.state.headerTitle} />
-        </div>
+        {this.state.showHeader ? (
+          <div className="Header">
+            <Header headerTitle={this.state.headerTitle} />
+          </div>
+        ) : null}
+
         <div className="Main">
           <Routes />
         </div>
 
-        <div className="Footer">
-          <Ticker />
-        </div>
+        {this.state.showTicker ? (
+          <div className="Footer">
+            <Ticker />
+          </div>
+        ) : null}
       </div>
     );
   }
