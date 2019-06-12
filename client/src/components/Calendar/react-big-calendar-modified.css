@@ -59,12 +59,14 @@ button.rbc-input::-moz-focus-inner {
   direction: rtl;
 }
 
+/* text color for days outside current month */
 .rbc-off-range {
-  color: #999999;
+  color: gray;
 }
 
+/* background color for days outside current month */
 .rbc-off-range-bg {
-  background: #e6e6e6;
+  background: black;
 }
 
 .rbc-header {
@@ -99,10 +101,11 @@ button.rbc-input::-moz-focus-inner {
   user-select: none;
   -webkit-user-select: none;
   z-index: 4;
+  font-size: 95%;
 }
 
 .rbc-today {
-  background-color: #eaf6ff;
+  /* background-color: black; */
 }
 
 .rbc-toolbar {
@@ -119,8 +122,7 @@ button.rbc-input::-moz-focus-inner {
   text-align: center;
 }
 .rbc-toolbar button {
-  /* color: #373a3c; */
-  color: red;
+  color: #373a3c;
   display: inline-block;
   margin: 0;
   text-align: center;
@@ -472,6 +474,7 @@ button.rbc-input::-moz-focus-inner {
   line-height: 1;
   height: 100%;
   min-height: 1em;
+  font-size: 50%;
 }
 .rbc-day-slot .rbc-time-slot {
   border-top: 1px solid #f7f7f7;
@@ -567,7 +570,7 @@ button.rbc-input::-moz-focus-inner {
 }
 .rbc-time-view .rbc-row {
   box-sizing: border-box;
-  min-height: 20px;
+  min-height: 5px;
 }
 
 .rbc-time-header {

@@ -1,5 +1,7 @@
 import React from "react";
 
+import "./Ticker.css";
+
 let settings = {
   symbols: [
     {
@@ -44,8 +46,10 @@ export default class Tabsshow extends React.PureComponent {
   }
   render() {
     return (
-      <div className="tradingview-widget-container" ref={this._ref}>
-        <div className="tradingview-widget-container__widget" />
+      <div className="Footer">
+        <div className="tradingview-widget-container" ref={this._ref}>
+          <div className="tradingview-widget-container__widget" />
+        </div>
       </div>
     );
   }

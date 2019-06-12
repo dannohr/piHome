@@ -8,6 +8,7 @@ body {
   background-color: #282c34;
   color: white;
   height: calc(100vh - 54px);
+
   margin: 0px;
   border: 2px solid lightsteelblue;
 }
@@ -21,5 +22,5 @@ body {
 } */
 
 .Main {
-  height: 480px;
+  height: 100%;
 }

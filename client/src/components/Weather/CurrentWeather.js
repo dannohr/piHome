@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import moment from "moment";
+import Ticker from "../Ticker/Ticker";
 
 import "./CurrentWeather.css";
 
@@ -134,6 +135,7 @@ class CurrentWeather extends React.Component {
 
           {this.state.error && <p>{this.state.error}</p>}
         </div>
+        <Ticker />
       </div>
     );
   }

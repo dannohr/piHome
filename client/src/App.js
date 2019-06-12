@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 import Header from "./components/Header/Header";
-import Ticker from "./components/Ticker/Ticker";
+// import Ticker from "./components/Ticker/Ticker";
 
 import Routes from "./components/Routes/Routes";
 
@@ -10,8 +10,8 @@ import "./App.css";
 class App extends Component {
   state = {
     headerTitle: "Current Weather",
-    showTicker: false,
-    showHeader: false
+    showTicker: true,
+    showHeader: true
   };
 
   render() {
@@ -27,11 +27,11 @@ class App extends Component {
           <Routes />
         </div>
 
-        {this.state.showTicker ? (
+        {/* {this.state.showTicker ? (
           <div className="Footer">
             <Ticker />
           </div>
-        ) : null}
+        ) : null} */}
       </div>
     );
   }
