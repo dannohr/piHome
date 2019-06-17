@@ -1,0 +1,18 @@
+.DailyData {
+  margin: 0px;
+  padding: 0px;
+  border-style: none;
+}
+
+.DailyTemp {
+  margin: 0px;
+  padding: 0px;
+  border-style: none;
+  font-weight: bold;
+}
+
+.TableHeader {
+  margin: 0px;
+  padding: 0px;
+  border-bottom: 1px solid white;
+}

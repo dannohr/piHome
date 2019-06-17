@@ -1,7 +1,6 @@
 import React from "react";
 import axios from "axios";
 import moment from "moment";
-import Ticker from "../Ticker/Ticker";
 
 import "./CurrentWeather.css";
 
@@ -17,21 +16,6 @@ class CurrentWeather extends React.Component {
     asOf: undefined
   };
 
-  componentWillMount() {
-    // // load current data
-    // this.handleGetCurrentWeather();
-    // this.handleGetCurrentThermostatStatus();
-    // // set interval to update every minute
-    // this.interval = setInterval(
-    //   () => {
-    //     this.handleGetCurrentWeather();
-    //     this.handleGetCurrentThermostatStatus();
-    //     console.log("Updated Weather Info");
-    //   },
-    //   60000 // refresh every 60 seconds
-    // );
-  }
-
   componentDidMount() {
     // load current data
     this.handleGetCurrentWeather();
@@ -41,7 +25,7 @@ class CurrentWeather extends React.Component {
     this.interval = setInterval(
       () => {
         this.handleGetCurrentWeather();
-        this.handleGetCurrentThermostatStatus();
+
         console.log("Updated Weather Info");
       },
       60000 // refresh every 60 seconds
@@ -135,7 +119,6 @@ class CurrentWeather extends React.Component {
 
           {this.state.error && <p>{this.state.error}</p>}
         </div>
-        <Ticker />
       </div>
     );
   }
