@@ -4,15 +4,14 @@ body {
 }
 
 .App {
-  overflow: hidden;
+  overflow: scroll;
   text-align: center;
   background-color: #282c34;
   color: white;
-  /* height: 100vh; */
-  /* height: calc(100vh - 54px); */
-
   margin: 0px;
   border: 2px solid lightsteelblue;
+  /* height: 100vh; */
+  /* height: calc(100vh - 54px); */
 }
 
 /* .Footer {
@@ -25,4 +24,9 @@ body {
 
 .Main {
   /* height: 100%; */
+}
+
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent; /* make scrollbar transparent */
 }
