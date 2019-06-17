@@ -4,6 +4,7 @@ body {
 }
 
 .App {
+  overflow: hidden;
   text-align: center;
   background-color: #282c34;
   color: white;
