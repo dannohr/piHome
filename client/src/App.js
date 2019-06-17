@@ -23,15 +23,10 @@ class App extends Component {
           </div>
         ) : null}
 
-        <div className="Main">
+        {/* <div className="Main"> */}
+        <div>
           <Routes />
         </div>
-
-        {/* {this.state.showTicker ? (
-          <div className="Footer">
-            <Ticker />
-          </div>
-        ) : null} */}
       </div>
     );
   }

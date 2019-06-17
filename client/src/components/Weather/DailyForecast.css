@@ -9,10 +9,16 @@
   padding: 0px;
   border-style: none;
   font-weight: bold;
+  font-size: 20px;
 }
 
 .TableHeader {
   margin: 0px;
   padding: 0px;
+  padding-top: 10px;
   border-bottom: 1px solid white;
+}
+
+.DailyForecastTable {
+  height: 100%;
 }

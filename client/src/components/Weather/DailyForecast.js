@@ -97,7 +97,7 @@ class DailyForecast extends React.Component {
   render() {
     return (
       <div>
-        <table>
+        <table className="DailyForecastTable">
           <tbody>
             <tr>
               {this.state.forecastData

@@ -3,12 +3,12 @@ import Ticker from "../Ticker/Ticker";
 import CurrentWeather from "./CurrentWeather";
 import DailyForecast from "./DailyForecast";
 
-import "./CurrentWeather.css";
+import "./Weather.css";
 
 class Weather extends React.Component {
   render() {
     return (
-      <div>
+      <div className="Wrapper">
         <CurrentWeather />
         <DailyForecast />
         <Ticker />
