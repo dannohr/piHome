@@ -27,7 +27,7 @@ class CurrentWeather extends React.Component {
 
         console.log("Updated Weather Info");
       },
-      600000 // refresh every 600 seconds, 10 mins
+      1800000 // refresh every 1,800 seconds, 30 mins
     );
   }
 
