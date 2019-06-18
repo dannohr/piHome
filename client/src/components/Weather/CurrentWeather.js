@@ -1,9 +1,9 @@
 import React from "react";
 import axios from "axios";
 import moment from "moment";
-
 import "./CurrentWeather.css";
 
+const iconPath = process.env.PUBLIC_URL + "/weatherIcons/";
 class CurrentWeather extends React.Component {
   state = {
     outsideTemp: 1,
@@ -12,7 +12,7 @@ class CurrentWeather extends React.Component {
     description: "unknown",
     error: undefined,
     asOf: undefined,
-    weatherIcon: "02"
+    weatherIcon: "01d"
   };
 
   componentDidMount() {
@@ -143,12 +143,13 @@ class CurrentWeather extends React.Component {
         </div>
         <div className="Column3">
           <img
-            src={
-              process.env.PUBLIC_URL +
-              "/weatherIcons/" +
-              this.state.weatherIcon +
-              ".png"
-            }
+            // src={
+            //   process.env.PUBLIC_URL +
+            //   "/weatherIcons/" +
+            //   this.state.weatherIcon +
+            //   ".png"
+            // }
+            src={iconPath + this.state.weatherIcon + ".png"}
             alt=""
             height="150"
             width="150"
