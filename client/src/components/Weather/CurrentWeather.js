@@ -6,14 +6,13 @@ import "./CurrentWeather.css";
 
 class CurrentWeather extends React.Component {
   state = {
-    outsideTemp: undefined,
-    insideTemp: 6,
-    city: undefined,
-    country: undefined,
-    humidity: undefined,
-    description: undefined,
+    outsideTemp: 1,
+    insideTemp: 1,
+    humidity: 1,
+    description: "unknown",
     error: undefined,
-    asOf: undefined
+    asOf: undefined,
+    weatherIcon: "02"
   };
 
   componentDidMount() {
@@ -28,7 +27,7 @@ class CurrentWeather extends React.Component {
 
         console.log("Updated Weather Info");
       },
-      60000 // refresh every 60 seconds
+      600000 // refresh every 600 seconds, 10 mins
     );
   }
 
@@ -41,14 +40,14 @@ class CurrentWeather extends React.Component {
     axios
       .get("/api/weather/current")
       .then(response => {
+        console.log(response.data[0]);
         let currentTime = moment(new Date()).format("MMMM Do YYYY, h:mm a");
         this.setState({
-          outsideTemp: response.data.main.temp,
-          city: response.data.name,
-          country: response.data.sys.country,
-          humidity: response.data.main.humidity + "%",
-          description: response.data.weather[0].description,
+          outsideTemp: response.data[0].Temperature.Imperial.Value,
+          humidity: response.data[0].RelativeHumidity + "%",
+          description: response.data[0].WeatherText,
           asOf: currentTime,
+          weatherIcon: response.data[0].WeatherIcon,
           error: ""
         });
       })
@@ -72,52 +71,66 @@ class CurrentWeather extends React.Component {
 
   render() {
     return (
-      <div>
-        <div className="WeatherInfo">
-          {this.state.outsideTemp && (
-            <p className="WeatherRow">
-              Outside Temp:
-              <span>
-                {" "}
-                {Math.round(this.state.outsideTemp)}
-                &deg;F
-              </span>
-            </p>
-          )}
+      <div className="Container">
+        <div className="Column1" />
+        <div className="Column2">
+          <div className="WeatherInfo">
+            {this.state.outsideTemp && (
+              <p className="WeatherRow">
+                Outside Temp:
+                <span>
+                  {" "}
+                  {Math.round(this.state.outsideTemp)}
+                  &deg;F
+                </span>
+              </p>
+            )}
 
-          {this.state.insideTemp && (
-            <p className="WeatherRow">
-              Inside Temp:
-              <span>
-                {" "}
-                {Math.round(this.state.insideTemp)}
-                &deg;F
-              </span>
-            </p>
-          )}
+            {this.state.insideTemp && (
+              <p className="WeatherRow">
+                Inside Temp:
+                <span>
+                  {" "}
+                  {Math.round(this.state.insideTemp)}
+                  &deg;F
+                </span>
+              </p>
+            )}
 
-          {this.state.time && (
-            <p className="WeatherRow">
-              Current Time:
-              <span>{this.state.time}</span>
-            </p>
-          )}
+            {this.state.time && (
+              <p className="WeatherRow">
+                Current Time:
+                <span>{this.state.time}</span>
+              </p>
+            )}
 
-          {this.state.humidity && (
-            <p className="WeatherRow">
-              Humidity:
-              <span> {this.state.humidity}</span>
-            </p>
-          )}
+            {this.state.humidity && (
+              <p className="WeatherRow">
+                Humidity:
+                <span> {this.state.humidity}</span>
+              </p>
+            )}
 
-          {this.state.description && (
-            <p className="WeatherRow">
-              Conditions:
-              <span> {this.state.description}</span>
-            </p>
-          )}
+            {this.state.description && (
+              <p className="WeatherRow">
+                Conditions:
+                <span> {this.state.description}</span>
+              </p>
+            )}
 
-          {this.state.error && <p>{this.state.error}</p>}
+            {this.state.error && <p>{this.state.error}</p>}
+          </div>
+        </div>
+        <div className="Column3">
+          <img
+            src={
+              process.env.PUBLIC_URL +
+              "/weatherIcons/" +
+              this.state.weatherIcon +
+              ".png"
+            }
+            alt=""
+          />
         </div>
       </div>
     );

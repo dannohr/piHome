@@ -7,3 +7,21 @@
 .WeatherInfo {
   padding-top: 15px;
 }
+
+.Column1 {
+  width: 20%;
+}
+
+.Column2 {
+  width: 60%;
+  text-align: center;
+}
+
+.Column3 {
+  width: 20%;
+  margin: auto;
+}
+
+.Container {
+  display: flex;
+}
