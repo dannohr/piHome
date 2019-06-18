@@ -114,13 +114,10 @@ module.exports = {
       "?apikey=" +
       api_key +
       "&language=en-us&details=true";
-    console.log(url);
 
     axios
       .get(url)
       .then(response => {
-        console.log(response.data);
-
         res.status(200).send(response.data);
       })
       .catch(err => {

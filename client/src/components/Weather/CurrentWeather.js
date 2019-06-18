@@ -17,13 +17,13 @@ class CurrentWeather extends React.Component {
 
   componentDidMount() {
     // load current data
-    this.handleGetCurrentWeather();
+    this.handleGetCurrentWeatherOpenweather();
     this.handleGetCurrentThermostatStatus();
 
     // set interval to update every minute
     this.interval = setInterval(
       () => {
-        this.handleGetCurrentWeather();
+        this.handleGetCurrentWeatherOpenweather();
 
         console.log("Updated Weather Info");
       },
@@ -36,9 +36,9 @@ class CurrentWeather extends React.Component {
     console.log("stopped interval");
   }
 
-  handleGetCurrentWeather() {
+  handleGetCurrentWeatherAccuweather() {
     axios
-      .get("/api/weather/current")
+      .get("/api/weather/accuweather/current")
       .then(response => {
         console.log(response.data[0]);
         let currentTime = moment(new Date()).format("MMMM Do YYYY, h:mm a");
@@ -48,6 +48,26 @@ class CurrentWeather extends React.Component {
           description: response.data[0].WeatherText,
           asOf: currentTime,
           weatherIcon: response.data[0].WeatherIcon,
+          error: ""
+        });
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+  }
+
+  handleGetCurrentWeatherOpenweather() {
+    axios
+      .get("/api/weather/openweather/current")
+      .then(response => {
+        console.log(response.data);
+        let currentTime = moment(new Date()).format("MMMM Do YYYY, h:mm a");
+        this.setState({
+          outsideTemp: response.data.main.temp,
+          humidity: response.data.main.humidity + "%",
+          description: response.data.weather[0].description,
+          asOf: currentTime,
+          weatherIcon: response.data.weather[0].icon,
           error: ""
         });
       })
@@ -130,6 +150,8 @@ class CurrentWeather extends React.Component {
               ".png"
             }
             alt=""
+            height="150"
+            width="150"
           />
         </div>
       </div>
