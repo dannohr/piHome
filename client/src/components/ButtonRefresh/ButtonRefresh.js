@@ -12,7 +12,7 @@ const styles = {
   }
 };
 
-class RefreshButton extends React.Component {
+class ButtonRefresh extends React.Component {
   refreshPage = () => () => {
     console.log("Refresh Page");
     window.location.reload();
@@ -41,8 +41,8 @@ class RefreshButton extends React.Component {
   }
 }
 
-RefreshButton.propTypes = {
+ButtonRefresh.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(RefreshButton);
+export default withStyles(styles)(ButtonRefresh);

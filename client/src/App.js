@@ -14,17 +14,27 @@ class App extends Component {
     showHeader: true
   };
 
+  handleSetTitle = title => {
+    console.log(title);
+    this.setState({
+      headerTitle: title
+    });
+  };
+
   render() {
     return (
       <div className="App">
         {this.state.showHeader ? (
           <div className="Header">
-            <Header headerTitle={this.state.headerTitle} />
+            <Header
+              headerTitle={this.state.headerTitle}
+              updateHeaderTitle={this.handleSetTitle}
+            />
           </div>
         ) : null}
 
         {/* <div className="Main"> */}
-        <div>
+        <div className="Main">
           <Routes />
         </div>
       </div>

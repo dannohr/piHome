@@ -9,13 +9,20 @@ module.exports = {
     let city = "Dallas";
     let country = "USA";
     let api_key = process.env.WEATHER_API_KEY;
+    let lat = 32.78;
+    let lon = -96.81;
     // console.log("the api key is ", api_key);
 
     let url =
-      "http://api.openweathermap.org/data/2.5/weather?q=" +
-      city +
-      "," +
-      country +
+      "http://api.openweathermap.org/data/2.5/weather?" +
+      // "q=" +
+      // city +
+      // "," +
+      // country +
+      "lat=" +
+      lat +
+      "&lon=" +
+      lon +
       "&appid=" +
       api_key +
       "&units=imperial";
@@ -43,11 +50,14 @@ module.exports = {
     // let country = req.body.country;
     let city = "Dallas";
     let country = "USA";
+    let lat = 32.823333;
+    let long = -96.835;
     let api_key = process.env.WEATHER_API_KEY;
     // console.log("the api key is ", api_key);
 
     let url =
-      "http://api.openweathermap.org/data/2.5/forecast?q=" +
+      "http://api.openweathermap.org/data/2.5/forecast?" +
+      "q=" +
       city +
       "," +
       country +

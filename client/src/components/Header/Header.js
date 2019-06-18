@@ -1,22 +1,22 @@
 import React from "react";
-import Nav from "../Nav/Nav";
-import RefreshButton from "../RefreshButton/RefreshButton";
+import ButtonMenu from "../ButtonMenu/ButtonMenu";
+import ButtonRefresh from "../ButtonRefresh/ButtonRefresh";
 
 import "./Header.css";
 
 class Header extends React.Component {
   render() {
     return (
-      <div className="Header">
+      <div>
         <table>
           <thead>
             <tr>
               <td className="d1">
-                <RefreshButton />
+                <ButtonRefresh />
               </td>
               <td className="d2">{this.props.headerTitle}</td>
               <td className="d3">
-                <Nav />
+                <ButtonMenu updateHeaderTitle={this.props.updateHeaderTitle} />
               </td>
             </tr>
           </thead>

@@ -11,7 +11,7 @@ import Typography from "@material-ui/core/Typography";
 import ListItemText from "@material-ui/core/ListItemText";
 import Link from "@material-ui/core/Link";
 
-import "./Nav.css";
+import "./ButtonMenu.css";
 
 const styles = {
   list: {
@@ -28,7 +28,7 @@ const menuItemStyle = {
   fontSize: "25px"
 };
 
-class MenuButtons extends React.Component {
+class ButtonMenu extends React.Component {
   state = {
     left: false
   };
@@ -41,6 +41,7 @@ class MenuButtons extends React.Component {
 
   render() {
     const { classes } = this.props;
+    console.log(this.props);
 
     const sideList = (
       <div className={classes.list}>
@@ -49,7 +50,13 @@ class MenuButtons extends React.Component {
             <ListItem button key="0">
               <ListItemText
                 primary={
-                  <Typography variant="h6" style={menuItemStyle}>
+                  <Typography
+                    variant="h6"
+                    style={menuItemStyle}
+                    onClick={() =>
+                      this.props.updateHeaderTitle("Current Weather")
+                    }
+                  >
                     Weather
                   </Typography>
                 }
@@ -61,7 +68,11 @@ class MenuButtons extends React.Component {
             <ListItem button key="1">
               <ListItemText
                 primary={
-                  <Typography variant="h6" style={menuItemStyle}>
+                  <Typography
+                    variant="h6"
+                    style={menuItemStyle}
+                    onClick={() => this.props.updateHeaderTitle("Calendar")}
+                  >
                     Calendar
                   </Typography>
                 }
@@ -73,7 +84,11 @@ class MenuButtons extends React.Component {
             <ListItem button key="2">
               <ListItemText
                 primary={
-                  <Typography variant="h6" style={menuItemStyle}>
+                  <Typography
+                    variant="h6"
+                    style={menuItemStyle}
+                    onClick={() => this.props.updateHeaderTitle("Recipes")}
+                  >
                     Recipes
                   </Typography>
                 }
@@ -88,7 +103,12 @@ class MenuButtons extends React.Component {
             <ListItem button key="3">
               <ListItemText
                 primary={
-                  <Typography style={menuItemStyle}>Thermostat</Typography>
+                  <Typography
+                    style={menuItemStyle}
+                    onClick={() => this.props.updateHeaderTitle("Thermostat")}
+                  >
+                    Thermostat
+                  </Typography>
                 }
               />
             </ListItem>
@@ -98,7 +118,14 @@ class MenuButtons extends React.Component {
             <ListItem button key="4">
               <ListItemText
                 primary={
-                  <Typography style={menuItemStyle}>Cabinet Lights</Typography>
+                  <Typography
+                    style={menuItemStyle}
+                    onClick={() =>
+                      this.props.updateHeaderTitle("Cabinet Lights")
+                    }
+                  >
+                    Cabinet Lights
+                  </Typography>
                 }
               />
             </ListItem>
@@ -108,7 +135,12 @@ class MenuButtons extends React.Component {
             <ListItem button key="5">
               <ListItemText
                 primary={
-                  <Typography style={menuItemStyle}>Wifi Outlet 1</Typography>
+                  <Typography
+                    style={menuItemStyle}
+                    onClick={() => this.props.updateHeaderTitle("Outlet 1")}
+                  >
+                    Wifi Outlet 1
+                  </Typography>
                 }
               />
             </ListItem>
@@ -118,7 +150,12 @@ class MenuButtons extends React.Component {
             <ListItem button key="6">
               <ListItemText
                 primary={
-                  <Typography style={menuItemStyle}>Wifi Outlet 2</Typography>
+                  <Typography
+                    style={menuItemStyle}
+                    onClick={() => this.props.updateHeaderTitle("Outlet 2")}
+                  >
+                    Wifi Outlet 2
+                  </Typography>
                 }
               />
             </ListItem>
@@ -157,8 +194,8 @@ class MenuButtons extends React.Component {
   }
 }
 
-MenuButtons.propTypes = {
+ButtonMenu.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(MenuButtons);
+export default withStyles(styles)(ButtonMenu);

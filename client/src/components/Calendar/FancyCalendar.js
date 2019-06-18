@@ -4,6 +4,7 @@ import BigCalendar from "react-big-calendar";
 import events from "./events";
 
 import moment from "moment";
+
 import "./react-big-calendar.css";
 
 const localizer = BigCalendar.momentLocalizer(moment); // or globalizeLocalizer

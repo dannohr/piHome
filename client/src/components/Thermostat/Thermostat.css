@@ -1,0 +1,12 @@
+.Wrapper {
+  margin: 0px;
+  padding: 0px;
+  /* background-color: red; */
+  /* display: flex;
+  flex-direction: column; */
+  /* border-style: solid;
+    border-color: purple; */
+
+  height: calc(100vh - 50px); /*Header is 50px*/
+  /* background-color: gray; */
+}
