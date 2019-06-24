@@ -1,8 +1,9 @@
 var express = require("express");
 var router = express.Router();
 
-var calendarCtrl = require("../controller/calendarCtrl");
+var calendarCtrl = require("../controller/googCalendarCtrl");
+// var calendarCtrl = require("../modules/googleCal");
 
-router.get("/", calendarCtrl.get_events);
+router.get("/", calendarCtrl.index);
 
 module.exports = router;

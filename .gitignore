@@ -13,3 +13,7 @@
 /client/build
 
 
+api/config/credentials.json
+api/config/config.json
+api/config/token.json
+api/config/oldtoken.json

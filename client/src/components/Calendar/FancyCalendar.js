@@ -1,8 +1,6 @@
 import React from "react";
-// import axios from "axios";
+import axios from "axios";
 import BigCalendar from "react-big-calendar";
-import events from "./events";
-
 import moment from "moment";
 
 import "./react-big-calendar.css";
@@ -16,40 +14,56 @@ const ColoredDateCellWrapper = ({ children }) =>
     }
   });
 
-// let handleGetCalendarData = () => {
-//   axios
-//     .get("/api/calendar")
-//     .then(response => {
-//       console.log(response);
-//       return response;
-//       // this.setState({
-//       //   outsideTemp: response.data.main.temp,
-//       //   city: response.data.name,
-//       //   country: response.data.sys.country,
-//       //   humidity: response.data.main.humidity + "%",
-//       //   description: response.data.weather[0].description,
-//       //   asOf: currentTime,
-//       //   error: ""
-//       // });
-//     })
-//     .catch(function(error) {
-//       console.log(error);
-//     });
-// };
+class FancyCalendar extends React.Component {
+  state = {
+    events: []
+  };
 
-let FancyCalendar = () => {
-  return (
-    <BigCalendar
-      events={events}
-      views={["month", "week"]}
-      step={60}
-      showMultiDayTimes
-      components={{
-        timeSlotWrapper: ColoredDateCellWrapper
-      }}
-      localizer={localizer}
-    />
-  );
-};
+  handleGetCalendarData = () => {
+    axios
+      .get("/api/calendar")
+      .then(response => {
+        let allEvents = response.data;
+
+        this.setState({
+          events: allEvents
+        });
+        console.log(this.state);
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+  };
+
+  componentDidMount() {
+    // load current data
+    this.handleGetCalendarData();
+
+    // set interval to update every minute
+    // this.interval = setInterval(
+    //   () => {
+    //     this.handleGetCurrentWeatherOpenweather();
+
+    //     console.log("Updated Weather Info");
+    //   },
+    //   1800000 // refresh every 1,800 seconds, 30 mins
+    // );
+  }
+
+  render() {
+    return (
+      <BigCalendar
+        events={this.state.events}
+        views={["month", "week"]}
+        step={60}
+        showMultiDayTimes
+        components={{
+          timeSlotWrapper: ColoredDateCellWrapper
+        }}
+        localizer={localizer}
+      />
+    );
+  }
+}
 
 export default FancyCalendar;

@@ -1,5 +1,6 @@
 var axios = require("axios");
 var moment = require("moment");
+
 const now = new Date();
 var events = [
   {
@@ -116,6 +117,7 @@ var events = [
 
 module.exports = {
   get_events(req, res, next) {
+    getEvents();
     res.status(200).send(events);
   }
 };
