@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import moment from "moment";
 import "./CurrentWeather.css";
+// let accuSample = require("./SampleWeather.json");
 
 const iconPath = process.env.PUBLIC_URL + "/weatherIcons/";
 class CurrentWeather extends React.Component {
@@ -17,13 +18,16 @@ class CurrentWeather extends React.Component {
 
   componentDidMount() {
     // load current data
-    this.handleGetCurrentWeatherOpenweather();
+    // this.handleGetCurrentWeatherOpenweather();
+    this.handleGetCurrentWeatherAccuweather();
     this.handleGetCurrentThermostatStatus();
 
     // set interval to update every minute
     this.interval = setInterval(
       () => {
-        this.handleGetCurrentWeatherOpenweather();
+        // this.handleGetCurrentWeatherOpenweather();
+        this.handleGetCurrentWeatherAccuweather();
+        this.handleGetCurrentThermostatStatus();
 
         console.log("Updated Weather Info");
       },
@@ -37,6 +41,17 @@ class CurrentWeather extends React.Component {
   }
 
   handleGetCurrentWeatherAccuweather() {
+    // this.setState({
+    //   outsideTemp: accuSample[0].Temperature.Imperial.Value,
+    //   humidity: accuSample[0].RelativeHumidity + "%",
+    //   description: accuSample[0].WeatherText,
+    //   // asOf: currentTime,
+    //   weatherIcon: accuSample[0].WeatherIcon,
+    //   error: ""
+    // });
+
+    // console.log(this.state);
+
     axios
       .get("/api/weather/accuweather/current")
       .then(response => {
@@ -142,18 +157,18 @@ class CurrentWeather extends React.Component {
           </div>
         </div>
         <div className="Column3">
-          <img
-            // src={
-            //   process.env.PUBLIC_URL +
-            //   "/weatherIcons/" +
-            //   this.state.weatherIcon +
-            //   ".png"
-            // }
-            src={iconPath + this.state.weatherIcon + ".png"}
-            alt=""
-            height="150"
-            width="150"
-          />
+          <div className="WeatherIcon">
+            <img
+              // src={
+              //   process.env.PUBLIC_URL +
+              //   "/weatherIcons/" +
+              //   this.state.weatherIcon +
+              //   ".png"
+              // }
+              src={iconPath + this.state.weatherIcon + ".png"}
+              alt=""
+            />
+          </div>
         </div>
       </div>
     );

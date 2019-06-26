@@ -1,0 +1,11 @@
+.stock-wrap {
+  padding: 0px;
+  margin: 0px;
+  border-style: solid;
+  border-color: white;
+  background-color: red;
+}
+
+.stock-name {
+  color: blue;
+}

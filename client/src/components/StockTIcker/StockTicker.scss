@@ -34,15 +34,17 @@ $duration: 30s;
   bottom: 0;
   width: 100%;
   overflow: hidden;
-  height: 4rem;
+  // height: 2rem;
+  height: 45px;
   background-color: rgba(#000, 0.9);
   padding-left: 100%;
   box-sizing: content-box;
 
   .ticker {
     display: inline-block;
-    height: 4rem;
-    line-height: 4rem;
+    // height: 2rem;
+    height: 45px;
+    line-height: 2rem;
     white-space: nowrap;
     padding-right: 100%;
     box-sizing: content-box;
@@ -59,7 +61,7 @@ $duration: 30s;
     &__item {
       display: inline-block;
 
-      padding: 0 2rem;
+      padding: 0 1rem;
       font-size: 2rem;
       color: white;
     }

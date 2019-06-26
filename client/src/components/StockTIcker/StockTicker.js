@@ -1,5 +1,8 @@
 import React from "react";
+import Stock from "./Stock.js";
 import "./StockTicker.scss";
+
+// https://codepen.io/lewismcarey/pen/GJZVoG?editors=1100
 
 function StockTicker() {
   return (
@@ -12,10 +15,27 @@ function StockTicker() {
 
       <div className="ticker-wrap">
         <div className="ticker">
-          <div className="ticker__item">Stock 1</div>
+          {/*<div className="ticker__item">Stock 1</div>
           <div className="ticker__item">Stock 2</div>
-          <div className="ticker__item">Stock 3</div>
-          <div className="ticker__item">Stock 4</div>
+         
+          <div className="ticker__item">Stock 4</div> */}
+          <div className="ticker__item">
+            <Stock
+              className="ticker__item"
+              stockName="Amazon"
+              stockPrice="$100.00"
+              stockChange="12%"
+            />
+          </div>
+          <div className="ticker__item">
+            <Stock
+              className="ticker__item"
+              stockName="ATT"
+              stockPrice="$50.00"
+              stockChange=".5%"
+            />
+          </div>
+          {/* </div> */}
         </div>
       </div>
 
