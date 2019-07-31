@@ -94,6 +94,23 @@ class ButtonMenu extends React.Component {
               />
             </ListItem>
           </Link>
+          <Link component={RouterLink} to="/electricusage">
+            <ListItem button key="3">
+              <ListItemText
+                primary={
+                  <Typography
+                    variant="h6"
+                    style={menuItemStyle}
+                    onClick={() =>
+                      this.props.updateHeaderTitle("Electric Tracking")
+                    }
+                  >
+                    Electricty
+                  </Typography>
+                }
+              />
+            </ListItem>
+          </Link>
         </List>
         <Divider />
 

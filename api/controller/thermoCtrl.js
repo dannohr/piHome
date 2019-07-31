@@ -1,6 +1,6 @@
 const axios = require("axios");
 
-const ip = "192.168.1.64";
+const ip = "192.168.1.98";
 
 module.exports = {
   current_status(req, res, next) {

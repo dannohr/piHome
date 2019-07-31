@@ -9,6 +9,7 @@ import Calendar from "../Calendar/Calendar";
 import CalendarToolbar from "../Calendar/CalendarToolbar";
 import Weather from "../Weather/Weather";
 import NotFound from "../NotFound/NotFound";
+import ElectricUsage from "../ElectricUsage/ElectricUsage";
 
 export default ({ childProps }) => (
   // <Router>
@@ -16,6 +17,7 @@ export default ({ childProps }) => (
     <Route exact path="/" component={Weather} />
     <Route path="/recipes" component={Recipes} />
     <Route path="/thermostat" component={Thermostat} />
+    <Route path="/electricusage" component={ElectricUsage} />
     <Route path="/calendar" component={FancyCalendar} />
     <Route path="/custom" component={CustomHeader} />
     <Route path="/outlet1" component={Calendar} />
