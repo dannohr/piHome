@@ -1,7 +1,7 @@
 "use strict";
 module.exports = (sequelize, DataTypes) => {
-  const Recipe = sequelize.define(
-    "Recipe",
+  const Stocks = sequelize.define(
+    "Stocks",
     {
       id: {
         primaryKey: true,
@@ -12,5 +12,5 @@ module.exports = (sequelize, DataTypes) => {
     },
     {}
   );
-  return Recipe;
+  return Stocks;
 };
