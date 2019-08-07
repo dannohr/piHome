@@ -5,25 +5,14 @@ var path = require("path");
 var Sequelize = require("sequelize");
 var basename = path.basename(__filename);
 var env = process.env.NODE_ENV || "development";
-var config = require(__dirname + "/config/config.json")[env];
-var configElectric = require("../db/sequelizeConfig");
+var config = require("../../config/sequelizeConfig")[env];
 var db = {};
 
-// if (config.use_env_variable) {
-//   var sequelize = new Sequelize(process.env[config.use_env_variable], config);
-// } else {
 var sequelize = new Sequelize(
-  config.database,
-  config.username,
-  config.password,
-  config
-);
-
-var sequelizeElectric = new Sequelize(
-  configElectric.meterReader.database,
-  configElectric.meterReader.username,
-  configElectric.meterReader.password,
-  configElectric.meterReader
+  config.meterReader.database,
+  config.meterReader.username,
+  config.meterReader.password,
+  config.meterReader
 );
 
 fs.readdirSync(__dirname)
@@ -33,11 +22,10 @@ fs.readdirSync(__dirname)
     );
   })
   .forEach(file => {
-    console.log(file);
     var model = sequelize["import"](path.join(__dirname, file));
     db[model.name] = model;
   });
-console.log(db);
+
 Object.keys(db).forEach(modelName => {
   // console.log("in the associate");
   if (db[modelName].associate) {

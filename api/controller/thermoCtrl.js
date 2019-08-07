@@ -1,12 +1,12 @@
 const axios = require("axios");
 
-const ip = "192.168.1.236";
+const ip = require("../config/thermostat");
 
 module.exports = {
   current_status(req, res, next) {
     console.log("getting current thermostat status");
-
-    let url = "http://" + ip + "/tstat";
+    console.log("the ip is ", ip.ip);
+    let url = "http://" + ip.ip + "/tstat";
     console.log(url);
 
     axios
