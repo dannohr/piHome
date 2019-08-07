@@ -20,7 +20,9 @@ module.exports = {
           meterDate: queryDate
         }
       })
-        .then(data => res.status(200).send({ lastDate: queryDate, data: data }))
+        .then(data =>
+          res.status(200).send({ lastDate: queryDate, dataPoints: data })
+        )
         .catch(error => {
           res.status(400).send(error);
         });

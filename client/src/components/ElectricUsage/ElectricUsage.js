@@ -6,15 +6,7 @@ import { Line } from "react-chartjs-2";
 class ElectricUsage extends React.Component {
   state = {
     chartData: {
-      labels: [
-        "12:15 am",
-        "12:30 am",
-        "12:45 am",
-        "1:00 am",
-        "1:15 am",
-        "1:30 am",
-        "1:45 am"
-      ],
+      labels: [],
       datasets: [
         {
           label: "Daily Electric Usage (kWh)",
@@ -35,14 +27,16 @@ class ElectricUsage extends React.Component {
           pointHoverBorderWidth: 2,
           pointRadius: 1,
           pointHitRadius: 10,
-          data: [0.236, 0.89, 0.329, 0.286, 0.328, 0.316, 0.222]
+          data: []
         }
       ]
     }
   };
 
   componentDidMount() {
+    console.log(this.state);
     this.handleDailyElectricData();
+    console.log(this.state);
   }
 
   handleDailyElectricData() {
@@ -61,6 +55,38 @@ class ElectricUsage extends React.Component {
       .get("/api/meterReader/today")
       .then(response => {
         console.log(response.data);
+        let labels = response.data.dataPoints.map(data => data.start);
+        let data = response.data.dataPoints.map(data => data.consumption);
+        console.log(labels);
+        console.log(data);
+        this.setState({
+          chartData: {
+            labels: labels,
+            datasets: [
+              {
+                label: "Daily Electric Usage (kWh)",
+                fill: false,
+                lineTension: 0.1,
+                backgroundColor: "rgba(75,192,192,0.4)",
+                borderColor: "rgba(75,192,192,1)",
+                borderCapStyle: "butt",
+                borderDash: [],
+                borderDashOffset: 0.0,
+                borderJoinStyle: "miter",
+                pointBorderColor: "rgba(75,192,192,1)",
+                pointBackgroundColor: "#fff",
+                pointBorderWidth: 1,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: "rgba(75,192,192,1)",
+                pointHoverBorderColor: "rgba(220,220,220,1)",
+                pointHoverBorderWidth: 2,
+                pointRadius: 1,
+                pointHitRadius: 10,
+                data: data
+              }
+            ]
+          }
+        });
         // console.log(response.data[0]);
         // let currentTime = moment(new Date()).format("MMMM Do YYYY, h:mm a");
         // this.setState({
