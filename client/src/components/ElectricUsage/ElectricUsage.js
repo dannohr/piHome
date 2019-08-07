@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-// import moment from "moment";
+import moment from "moment";
 import { Line } from "react-chartjs-2";
 
 class ElectricUsage extends React.Component {
@@ -29,7 +29,20 @@ class ElectricUsage extends React.Component {
           pointHitRadius: 10,
           data: []
         }
-      ]
+      ],
+      options: {
+        scales: {
+          yAxes: [
+            {
+              beginAtZero: true,
+              ticks: {
+                suggestedMin: 50,
+                suggestedMax: 100
+              }
+            }
+          ]
+        }
+      }
     }
   };
 
@@ -55,7 +68,9 @@ class ElectricUsage extends React.Component {
       .get("/api/meterReader/today")
       .then(response => {
         console.log(response.data);
-        let labels = response.data.dataPoints.map(data => data.start);
+        let labels = response.data.dataPoints.map(data =>
+          moment(data.start, "MM/DD/YYYY hh:mm a").format("LT")
+        );
         let data = response.data.dataPoints.map(data => data.consumption);
         console.log(labels);
         console.log(data);
