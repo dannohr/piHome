@@ -1,0 +1,22 @@
+table {
+  width: 100%;
+  color: white;
+}
+td {
+  vertical-align: center;
+  /* border-style: solid;
+  border-color: blue; */
+}
+.leftbttn {
+  text-align: right;
+  width: 33%;
+}
+.middlebttn {
+  text-align: center;
+  font-size: 30px;
+  width: 34%;
+}
+.rightbttn {
+  text-align: left;
+  width: 33%;
+}

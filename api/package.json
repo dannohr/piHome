@@ -16,6 +16,8 @@
     "magic-home": "^2.0.4",
     "moment": "^2.24.0",
     "morgan": "~1.9.0",
+    "pg": "^7.12.0",
+    "pg-hstore": "^2.3.3",
     "sequelize": "^5.8.12",
     "sqlite3": "^4.0.6",
     "tedious": "^6.2.0"
