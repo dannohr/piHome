@@ -16,8 +16,8 @@ module.exports = {
       define: {
         //prevent sequelize from pluralizing table names
         freezeTableName: true
-      },
-      logging: console.log
+      }
+      // logging: console.log
       // username: "sa",
       // password: "Password1",
       // database: "meterReader",

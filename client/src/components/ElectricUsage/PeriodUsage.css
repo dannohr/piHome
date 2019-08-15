@@ -1,0 +1,34 @@
+table {
+  width: 100%;
+  color: white;
+}
+td {
+  vertical-align: center;
+  /* border-style: solid;
+  border-color: blue; */
+}
+.headline {
+  text-align: center;
+  font-size: 2em;
+  margin: 0;
+}
+.linetwo {
+  text-align: center;
+  font-size: 1.5em;
+  margin: 0;
+}
+.linethree {
+  text-align: center;
+  font-size: 1em;
+  margin: 0;
+}
+.linechart {
+  text-align: center;
+  font-size: 1em;
+  /* border-color: green;
+  border-style: solid; */
+  height: 200px;
+}
+.canvas-container {
+  height: 60vh;
+}

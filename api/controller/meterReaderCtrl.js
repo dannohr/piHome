@@ -31,6 +31,7 @@ module.exports = {
   },
 
   get_this_period_daily_totals(req, res, next) {
+    // Look up beginning and end dates for current billing period
     return db.BillPeriod.findAll({
       where: {
         start: {
@@ -44,6 +45,7 @@ module.exports = {
       let periodStart = moment(period[0].start).format("YYYY-MM-DD");
       let periodEnd = moment(period[0].end).format("YYYY-MM-DD");
 
+      // Find Daily date for days in the billing period
       db.Daily.findAll({
         where: {
           meterDate: {
@@ -74,11 +76,22 @@ module.exports = {
         let avgEstReminingConsumption =
           (1000 - totalConsumption) / (daysInPeriod - data.length);
 
+        // Find The last date we have data for
+
+        let dates = data.map(function(x) {
+          return new Date(x.meterDate);
+          // return moment(x.meterDate);
+        });
+        // let lastDateWithData = new Date(Math.max.apply(null, dates));
+        let lastDate = new Date(Math.max.apply(null, dates));
+        let lastDateWithData = lastDate.toDateString(); //.split(" ")[0];
+
         res.status(200).send({
           billingPeriod: {
             billingStart: periodStart,
             billingEnd: periodEnd,
             daysIntoPeriod: data.length,
+            lastDateWithData: lastDateWithData,
             daysToGoInPeriod: daysInPeriod - data.length,
             totalConsumption: totalConsumption,
             avgDailyConsumption: avgDailyConsumption,

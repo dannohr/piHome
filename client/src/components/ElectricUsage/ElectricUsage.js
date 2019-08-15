@@ -1,6 +1,6 @@
 import React from "react";
-import ButtonChart from "../ButtonChart/ButtonChart";
-import DailyUsage from "./DailyUsage";
+// import ButtonChart from "../ButtonChart/ButtonChart";
+// import DailyUsage from "./DailyUsage";
 import PeriodUsage from "./PeriodUsage";
 
 import "./ElectricUsage.css";
