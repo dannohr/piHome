@@ -5,7 +5,6 @@ const { Op, literal } = require("sequelize");
 module.exports = {
   get_today(req, res, next) {
     let today = moment().format("YYYY-MM-DD");
-    // let lastDataDate = getLastDayWithData();
 
     console.log("getting all meter data");
     console.log("today is: ", today);
@@ -42,8 +41,11 @@ module.exports = {
         }
       }
     }).then(period => {
-      let periodStart = moment(period[0].start).format("YYYY-MM-DD");
-      let periodEnd = moment(period[0].end).format("YYYY-MM-DD");
+      let periodStart = moment(period[0].start).subtract(1, "days");
+      //.format("YYYY-MM-DD");
+
+      let periodEnd = moment(period[0].end).subtract(1, "days");
+      //.format("YYYY-MM-DD");
 
       // Find Daily date for days in the billing period
       db.Daily.findAll({
@@ -56,13 +58,14 @@ module.exports = {
         attributes: ["meterDate", "startRead", "endRead", "consumption"]
       }).then(data => {
         // Calculate number of days in current billing period
-        let daysInPeriod = moment
-          .duration(
-            moment(periodEnd, "YYYY-MM-DD").diff(
-              moment(periodStart, "YYYY-MM-DD")
+        let daysInPeriod =
+          moment
+            .duration(
+              moment(periodEnd, "YYYY-MM-DD").diff(
+                moment(periodStart, "YYYY-MM-DD")
+              )
             )
-          )
-          .asDays();
+            .asDays() + 1;
 
         //Calculate the total consumption, using *1 to convert text to number
         let totalConsumption = data.reduce(
@@ -88,8 +91,9 @@ module.exports = {
 
         res.status(200).send({
           billingPeriod: {
-            billingStart: periodStart,
-            billingEnd: periodEnd,
+            billingStart: periodStart.format("YYYY-MM-DD"),
+            billingEnd: periodEnd.format("YYYY-MM-DD"),
+            daysInPeriod: daysInPeriod,
             daysIntoPeriod: data.length,
             lastDateWithData: lastDateWithData,
             daysToGoInPeriod: daysInPeriod - data.length,
