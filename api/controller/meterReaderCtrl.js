@@ -55,7 +55,8 @@ module.exports = {
           }
         },
         order: [["meterDate", "asc"]],
-        attributes: ["meterDate", "startRead", "endRead", "consumption"]
+        attributes: ["meterDate", "startRead", "endRead", "consumption"],
+        raw: true //converts what comes back from Sequalize into just a plain object
       }).then(data => {
         // Calculate number of days in current billing period
         let daysInPeriod =
@@ -73,20 +74,53 @@ module.exports = {
           0
         );
 
+        // Calcuate average daily consumption
         let avgDailyConsumption = totalConsumption / data.length;
+
+        //Add Average daily consumption to the data, to be used in the chart
+        var dailyData = data.map(function(el) {
+          var o = Object.assign({}, el);
+          o.avgDailyConsumption = avgDailyConsumption;
+          return o;
+        });
 
         // Calculate what average consumption can be for the remaining period and not go over 1,000 kWh per period
         let avgEstReminingConsumption =
           (1000 - totalConsumption) / (daysInPeriod - data.length);
 
         // Find The last date we have data for
-
+        // Create an array of all dates in the data returned from api
         let dates = data.map(function(x) {
-          return new Date(x.meterDate);
+          return moment(x.meterDate, "YYYY-MM-DD");
         });
-        
-        let lastDate = new Date(Math.max.apply(null, dates));
-        let lastDateWithData = lastDate.toDateString(); 
+
+        // Find the max
+        // let lastDate = new Date(Math.max.apply(null, dates));
+        let lastDate = Math.max.apply(null, dates);
+        console.log(moment(lastDate).format("YYYY-MM-DD"));
+
+        let lastDateWithData = moment(lastDate).format("YYYY-MM-DD");
+        console.log(lastDateWithData);
+
+        // Build out daily data array to include the days in the future that are in this period
+        // Using this to make sure we show a whole month at a time on the graph, and as days progress
+        // more of the month gets filled in.  Can graphically see how far into the month you are.
+
+        let dateToAdd = moment(lastDate)
+          .add(1, "days")
+          .format("YYYY-MM-DD");
+
+        // Loop through and add the next date to the data set until you get to the last day of the period
+        while (
+          moment(dateToAdd).format("YYYY-MM-DD") <=
+          moment(periodEnd).format("YYYY-MM-DD")
+        ) {
+          dailyData.push({ meterDate: dateToAdd });
+
+          dateToAdd = moment(dateToAdd, "YYYY-MM-DD")
+            .add(1, "days")
+            .format("YYYY-MM-DD");
+        }
 
         res.status(200).send({
           billingPeriod: {
@@ -100,7 +134,7 @@ module.exports = {
             avgDailyConsumption: avgDailyConsumption,
             avgEstReminingConsumption: avgEstReminingConsumption
           },
-          data: data
+          dailyData: dailyData
         });
       });
     });

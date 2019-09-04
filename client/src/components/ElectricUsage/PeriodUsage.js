@@ -61,16 +61,20 @@ class PeriodUsage extends React.Component {
     axios
       .get("/api/meterReader/currentPeriod")
       .then(response => {
+        console.log(response.data);
         this.setState({
           billingPeriod: response.data.billingPeriod,
-          usageData: response.data.data
+          usageData: response.data.dailyData
         });
 
-        let labels = response.data.data.map(data =>
+        let labels = response.data.dailyData.map(data =>
           moment(data.meterDate, "YYYY-MM-DD").format("ddd, MMM Do")
         );
 
-        let data = response.data.data.map(data => data.consumption);
+        let dailyData = response.data.dailyData.map(data => data.consumption);
+        let avgDailyConsumption = response.data.dailyData.map(
+          data => data.avgDailyConsumption
+        );
 
         this.setState({
           chartData: {
@@ -95,7 +99,7 @@ class PeriodUsage extends React.Component {
                 pointHoverBorderWidth: 2,
                 pointRadius: 1,
                 pointHitRadius: 10,
-                data: data
+                data: dailyData
               },
               {
                 label: "Average Usage (kWh)",
@@ -116,7 +120,7 @@ class PeriodUsage extends React.Component {
                 pointHoverBorderWidth: 2,
                 pointRadius: 1,
                 pointHitRadius: 10,
-                data: [33.9, 33.9, 33.9, 33.9, 33.9, 33.9, 33.9, 33.9]
+                data: avgDailyConsumption
               }
             ]
           }
