@@ -83,11 +83,10 @@ module.exports = {
 
         let dates = data.map(function(x) {
           return new Date(x.meterDate);
-          // return moment(x.meterDate);
         });
-        // let lastDateWithData = new Date(Math.max.apply(null, dates));
+        
         let lastDate = new Date(Math.max.apply(null, dates));
-        let lastDateWithData = lastDate.toDateString(); //.split(" ")[0];
+        let lastDateWithData = lastDate.toDateString(); 
 
         res.status(200).send({
           billingPeriod: {
