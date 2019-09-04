@@ -77,16 +77,17 @@ module.exports = {
         // Calcuate average daily consumption
         let avgDailyConsumption = totalConsumption / data.length;
 
+        // Calculate what average consumption can be for the remaining period and not go over 1,000 kWh per period
+        let avgEstReminingConsumption =
+          (1000 - totalConsumption) / (daysInPeriod - data.length);
+
         //Add Average daily consumption to the data, to be used in the chart
         var dailyData = data.map(function(el) {
           var o = Object.assign({}, el);
           o.avgDailyConsumption = avgDailyConsumption;
+          o.avgEstReminingConsumption = avgEstReminingConsumption;
           return o;
         });
-
-        // Calculate what average consumption can be for the remaining period and not go over 1,000 kWh per period
-        let avgEstReminingConsumption =
-          (1000 - totalConsumption) / (daysInPeriod - data.length);
 
         // Find The last date we have data for
         // Create an array of all dates in the data returned from api
@@ -115,7 +116,10 @@ module.exports = {
           moment(dateToAdd).format("YYYY-MM-DD") <=
           moment(periodEnd).format("YYYY-MM-DD")
         ) {
-          dailyData.push({ meterDate: dateToAdd });
+          dailyData.push({
+            meterDate: dateToAdd,
+            avgEstReminingConsumption: avgEstReminingConsumption
+          });
 
           dateToAdd = moment(dateToAdd, "YYYY-MM-DD")
             .add(1, "days")

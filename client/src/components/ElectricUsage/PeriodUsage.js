@@ -76,6 +76,10 @@ class PeriodUsage extends React.Component {
           data => data.avgDailyConsumption
         );
 
+        let avgEstReminingConsumption = response.data.dailyData.map(
+          data => data.avgEstReminingConsumption
+        );
+
         this.setState({
           chartData: {
             labels: labels,
@@ -121,6 +125,27 @@ class PeriodUsage extends React.Component {
                 pointRadius: 1,
                 pointHitRadius: 10,
                 data: avgDailyConsumption
+              },
+              {
+                label: "Average Remaining (kWh)",
+                fill: false,
+                lineTension: 0.1,
+                backgroundColor: "rgba(0,128,0,1)",
+                borderColor: "rgba(0,128,0,1)",
+                borderCapStyle: "butt",
+                borderDash: [],
+                borderDashOffset: 0.0,
+                borderJoinStyle: "miter",
+                pointBorderColor: "rgba(0,128,0,1)",
+                pointBackgroundColor: "#fff",
+                pointBorderWidth: 1,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: "rgba(192,75,75,1)",
+                pointHoverBorderColor: "rgba(192,75,75,1)",
+                pointHoverBorderWidth: 2,
+                pointRadius: 1,
+                pointHitRadius: 10,
+                data: avgEstReminingConsumption
               }
             ]
           }
