@@ -159,25 +159,49 @@ class PeriodUsage extends React.Component {
   render() {
     return (
       <div>
-        <div className="headline">
-          Billing Period:{" "}
-          {moment(this.state.billingPeriod.billingStart).format("M/D/YY")} to{" "}
-          {moment(this.state.billingPeriod.billingEnd).format("M/D/YY")}
+        <div className="row">
+          <div className="column left">
+            <div className="linetwo">Yesterday</div>
+            <div className="headline">
+              {this.state.billingPeriod.consumptionYesterday} kWh
+            </div>
+            <div className="linetwo"> </div>
+          </div>
+
+          <div className="column middle">
+            <div className="headline">
+              Billing Period:{" "}
+              {moment(this.state.billingPeriod.billingStart).format("M/D/YY")}{" "}
+              to {moment(this.state.billingPeriod.billingEnd).format("M/D/YY")}
+            </div>
+
+            <div className="linetwo">
+              {this.state.billingPeriod.daysIntoPeriod} days into period,{" "}
+              {this.state.billingPeriod.daysToGoInPeriod} days remaining
+            </div>
+            <div className="linethree">
+              {Math.round(this.state.billingPeriod.totalConsumption * 10) / 10}{" "}
+              kWh used for an average of{" "}
+              {Math.round(this.state.billingPeriod.avgDailyConsumption * 10) /
+                10}{" "}
+              per day
+            </div>
+          </div>
+
+          <div className="column right">
+            <div className="linetwo">Today</div>
+            <div className="headline">
+              {this.state.billingPeriod.consumptionSoFarToday} kWh
+            </div>
+            <div className="linetwo">
+              {" "}
+              As of {this.state.billingPeriod.consumptionSoFarTodayAsOf}
+            </div>
+          </div>
         </div>
 
-        <div className="linetwo">
-          {this.state.billingPeriod.daysIntoPeriod} days into period,{" "}
-          {this.state.billingPeriod.daysToGoInPeriod} days remaining
-        </div>
-        <div className="linethree">
-          {Math.round(this.state.billingPeriod.totalConsumption * 10) / 10} kWh
-          used for an average of{" "}
-          {Math.round(this.state.billingPeriod.avgDailyConsumption * 10) / 10}{" "}
-          per day
-        </div>
         <div>
           <article className="canvas-container">
-            {/* <Line data={data} options={options}/> */}
             <Line
               data={this.state.chartData}
               options={{ maintainAspectRatio: false }}
