@@ -118,11 +118,6 @@ module.exports = {
       .add(-2, "days")
       .format("YYYY-MM-DD");
 
-    if (lastDateWithData === yesterday) {
-      consumptionSoFarToday =
-        "lastDateWithData is yesterday, so manual read is consumption so far today";
-    }
-
     let mostRecentManualReadTime = await db.OnDemand.findAll({
       attributes: [
         [db.sequelize.fn("max", db.sequelize.col("readTime")), "readTime"]
@@ -141,6 +136,7 @@ module.exports = {
       .duration(moment().diff(moment(previousDate)))
       .asDays();
 
+    //Assign values for yesterday (more than 2 days old wouldn't be yesterday)
     if (howOldIsLastRead < 2) {
       consumptionSoFarToday =
         Math.round(mostRecentManualReadData.consumption * 10) / 10;
@@ -157,7 +153,7 @@ module.exports = {
         daysIntoPeriod: currentPeriodDailyData.length,
         lastDateWithData: lastDateWithData,
         daysToGoInPeriod: daysInPeriod - currentPeriodDailyData.length,
-        totalConsumption: totalConsumption, // round to 1 decimal
+        totalConsumption: totalConsumption,
         avgDailyConsumption: avgDailyConsumption,
         avgEstReminingConsumption: avgEstReminingConsumption,
         consumptionSoFarToday: consumptionSoFarToday,

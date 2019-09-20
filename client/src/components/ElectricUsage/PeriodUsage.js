@@ -54,7 +54,21 @@ class PeriodUsage extends React.Component {
   componentDidMount() {
     // console.log(this.state);
     this.handleGetElectricData();
-    // console.log(this.state);
+    // set interval to update every minute
+    this.interval = setInterval(
+      () => {
+        // this.handleGetCurrentWeatherOpenweather();
+        this.handleGetElectricData();
+
+        console.log("Updated Weather Info");
+      },
+      1800000 // refresh every 1,800 seconds, 30 mins
+    );
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
+    console.log("stopped interval");
   }
 
   handleGetElectricData() {
