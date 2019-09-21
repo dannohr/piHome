@@ -147,16 +147,18 @@ module.exports = {
     consumptionSoFarTodayAsOfDate = moment(
       mostRecentManualReadData.readTime
     ).format("MM/DD");
-
+    console.log("last read is ", howOldIsLastRead);
     //Assign values for yesterday (more than 2 days old wouldn't be yesterday)
     if (howOldIsLastRead < 2) {
       consumptionSoFarToday =
         Math.round(mostRecentManualReadData.consumption * 10) / 10;
 
-      consumptionYesterday = await db.Daily.findOne({
+      yesterdayData = await db.Daily.findOne({
         where: { meterDate: yesterday },
         raw: true
       });
+
+      consumptionYesterday = Math.round(yesterdayData.consumption * 10) / 10;
     }
 
     if (howOldIsLastRead >= 2 && howOldIsLastRead < 3) {
@@ -207,18 +209,6 @@ module.exports = {
         ) / 10;
 
       console.log(yesterdayManualReadData);
-
-      // consumptionSoFarToday =
-      //   Math.round(mostRecentManualReadData.consumption * 10) / 10;
-
-      // consumptionSoFarTodayAsOf = moment(
-      //   mostRecentManualReadData.readTime
-      // ).format("h:m a");
-
-      // consumptionYesterday = await db.Daily.findOne({
-      //   where: { meterDate: yesterday },
-      //   raw: true
-      // });
     }
 
     res.status(200).send({
