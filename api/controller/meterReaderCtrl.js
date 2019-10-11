@@ -137,6 +137,7 @@ module.exports = {
       .asDays();
 
     //Assign values for yesterday (more than 2 days old wouldn't be yesterday)
+    let consumptionSoFarTodayAsOf = null;
     if (howOldIsLastRead < 2) {
       consumptionSoFarToday =
         Math.round(mostRecentManualReadData.consumption * 10) / 10;
