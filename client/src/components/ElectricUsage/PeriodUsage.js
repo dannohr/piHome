@@ -209,7 +209,7 @@ class PeriodUsage extends React.Component {
             </div>
             <div className="linetwo">
               {" "}
-              As of {this.state.billingPeriod.consumptionSoFarTodayAsOf}
+              As of {this.state.billingPeriod.consumptionSoFarTodayAsOfTime}
             </div>
           </div>
         </div>

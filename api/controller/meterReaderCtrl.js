@@ -108,6 +108,8 @@ module.exports = {
     // If yesterday's data is already present, we only need to use the manual reads to calcculate today's usage
 
     let consumptionSoFarToday = 0;
+    let consumptionSoFarTodayAsOfTime = null;
+    let consumptionSoFarTodayAsOfDate = null;
     let consumptionYesterday = 0;
 
     let yesterday = moment()
@@ -118,6 +120,7 @@ module.exports = {
       .add(-2, "days")
       .format("YYYY-MM-DD");
 
+    // Find the date/time of the last manual read
     let mostRecentManualReadTime = await db.OnDemand.findAll({
       attributes: [
         [db.sequelize.fn("max", db.sequelize.col("readTime")), "readTime"]
@@ -125,6 +128,7 @@ module.exports = {
       raw: true
     });
 
+    // Lookup the manual read data for the time found above
     let mostRecentManualReadData = await db.OnDemand.findOne({
       where: { readTime: mostRecentManualReadTime[0].readTime },
       raw: true
@@ -136,14 +140,76 @@ module.exports = {
       .duration(moment().diff(moment(previousDate)))
       .asDays();
 
+    consumptionSoFarTodayAsOfTime = moment(
+      mostRecentManualReadData.readTime
+    ).format("h:m a");
+
+    consumptionSoFarTodayAsOfDate = moment(
+      mostRecentManualReadData.readTime
+    ).format("MM/DD");
+    console.log("last read is ", howOldIsLastRead);
     //Assign values for yesterday (more than 2 days old wouldn't be yesterday)
     let consumptionSoFarTodayAsOf = null;
     if (howOldIsLastRead < 2) {
       consumptionSoFarToday =
         Math.round(mostRecentManualReadData.consumption * 10) / 10;
-      consumptionSoFarTodayAsOf = moment(
-        mostRecentManualReadData.readTime
-      ).format("h:m a");
+
+      yesterdayData = await db.Daily.findOne({
+        where: { meterDate: yesterday },
+        raw: true
+      });
+
+      consumptionYesterday = Math.round(yesterdayData.consumption * 10) / 10;
+    }
+
+    if (howOldIsLastRead >= 2 && howOldIsLastRead < 3) {
+      console.log(mostRecentManualReadData);
+      console.log("Last Read is this old: ", howOldIsLastRead);
+      console.log(
+        "Read Time: ",
+        moment(mostRecentManualReadData.readTime).format("LLLL")
+      );
+      console.log(
+        "Previous Date: ",
+        moment(mostRecentManualReadData.previousDate).format("LLLL")
+      );
+
+      let beginningOfYesterday = moment(yesterday, "YYYY-MM-DD")
+        .startOf("day")
+        .format("LLLL");
+
+      let endOfYesterday = moment(yesterday, "YYYY-MM-DD")
+        .endOf("day")
+        .format("LLLL");
+
+      let yesterdayLastManualReadTime = await db.OnDemand.findAll({
+        where: {
+          readTime: {
+            [Op.between]: [beginningOfYesterday, endOfYesterday]
+          }
+        },
+        attributes: [
+          [db.sequelize.fn("max", db.sequelize.col("readTime")), "readTime"]
+        ],
+        raw: true
+      });
+
+      let yesterdayManualReadData = await db.OnDemand.findOne({
+        where: { readTime: yesterdayLastManualReadTime[0].readTime },
+        raw: true
+      });
+
+      consumptionYesterday =
+        Math.round(yesterdayManualReadData.consumption * 10) / 10;
+
+      consumptionSoFarToday =
+        Math.round(
+          (mostRecentManualReadData.consumption -
+            yesterdayManualReadData.consumption) *
+            10
+        ) / 10;
+
+      console.log(yesterdayManualReadData);
     }
 
     res.status(200).send({
@@ -158,7 +224,8 @@ module.exports = {
         avgDailyConsumption: avgDailyConsumption,
         avgEstReminingConsumption: avgEstReminingConsumption,
         consumptionSoFarToday: consumptionSoFarToday,
-        consumptionSoFarTodayAsOf: consumptionSoFarTodayAsOf,
+        consumptionSoFarTodayAsOfTime: consumptionSoFarTodayAsOfTime,
+        consumptionSoFarTodayAsOfDate: consumptionSoFarTodayAsOfDate,
         consumptionYesterday: consumptionYesterday
       },
       dailyData: dailyData
