@@ -32,6 +32,14 @@ module.exports = {
         )
         .asDays() + 1;
 
+    // round to no decimal places, the following returned a non interger.  In October got 30.04 instead of 30 days
+
+    daysInPeriod = Math.round(daysInPeriod * 10) / 10;
+
+    console.log("Days in Period are:", daysInPeriod);
+    console.log(periodEnd);
+    console.log(periodStart);
+
     const currentPeriodDailyData = await db.Daily.findAll({
       where: {
         meterDate: {
