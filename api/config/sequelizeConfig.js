@@ -17,26 +17,23 @@ module.exports = {
         //prevent sequelize from pluralizing table names
         freezeTableName: true
       }
-      // logging: console.log
-      // username: "sa",
-      // password: "Password1",
-      // database: "meterReader",
-      // host: "192.168.1.100",
-      // dialect: "mssql",
-      // dialectOptions: {
-      //   encrypt: true,
-      //   options: {
-      //     requestTimeout: 60000,
-      //     port: 1433
-      //   }
-      // },
-      // define: {
-      //   freezeTableName: true
-      // },
-      // seederStorage: "sequelize",
-      // logging: false
-      // // logging: console.log
     },
+
+    dart: {
+      username: "apps",
+      password: "Password1",
+      database: "meterReader",
+      schema: "dart",
+      host: "192.168.1.100",
+      dialect: "postgres",
+      seederStorage: "sequelize",
+      logging: false,
+      define: {
+        //prevent sequelize from pluralizing table names
+        freezeTableName: true
+      }
+    },
+
     pg: {
       username: "apps",
       password: "Password1",

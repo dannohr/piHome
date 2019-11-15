@@ -4,10 +4,10 @@ const ip = require("../config/thermostat");
 
 module.exports = {
   current_status(req, res, next) {
-    console.log("getting current thermostat status");
-    console.log("the ip is ", ip.ip);
+    // console.log("getting current thermostat status");
+    // console.log("the ip is ", ip.ip);
     let url = "http://" + ip.ip + "/tstat";
-    console.log(url);
+    // console.log(url);
 
     axios
       .get(url)

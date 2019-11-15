@@ -182,13 +182,14 @@ module.exports = {
         moment(mostRecentManualReadData.previousDate).format("LLLL")
       );
 
-      let beginningOfYesterday = moment(yesterday, "YYYY-MM-DD")
-        .startOf("day")
-        .format("LLLL");
+      let beginningOfYesterday = moment(yesterday, "YYYY-MM-DD").startOf("day");
+      // .format("LLLL");
 
-      let endOfYesterday = moment(yesterday, "YYYY-MM-DD")
-        .endOf("day")
-        .format("LLLL");
+      let endOfYesterday = moment(yesterday, "YYYY-MM-DD").endOf("day");
+      // .format("LLLL");
+
+      // Don't know now why I originally formatted these, but when I did it caused a deprecation error about date
+      // formats in yesterdayLastManualReadTime below
 
       let yesterdayLastManualReadTime = await db.OnDemand.findAll({
         where: {
@@ -207,17 +208,20 @@ module.exports = {
         raw: true
       });
 
-      consumptionYesterday =
-        Math.round(yesterdayManualReadData.consumption * 10) / 10;
-
-      consumptionSoFarToday =
-        Math.round(
-          (mostRecentManualReadData.consumption -
-            yesterdayManualReadData.consumption) *
-            10
-        ) / 10;
-
+      console.log("Yesterday Manual Read Data");
       console.log(yesterdayManualReadData);
+      console.log("------------------------");
+
+      yesterdayManualReadData
+        ? ((consumptionYesterday =
+            Math.round(yesterdayManualReadData.consumption * 10) / 10),
+          (consumptionSoFarToday =
+            Math.round(
+              (mostRecentManualReadData.consumption -
+                yesterdayManualReadData.consumption) *
+                10
+            ) / 10))
+        : ((consumptionYesterday = 0), (consumptionSoFarToday = 0));
     }
 
     res.status(200).send({
