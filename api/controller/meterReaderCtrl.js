@@ -19,9 +19,10 @@ module.exports = {
       }
     });
 
-    let periodStart = moment(currentPeriod[0].start).subtract(1, "days");
+    //Oringinally I thought needed to subtract one day, but now it looks like that's not the case.
+    let periodStart = moment(currentPeriod[0].start).subtract(0, "days");
 
-    let periodEnd = moment(currentPeriod[0].end).subtract(1, "days");
+    let periodEnd = moment(currentPeriod[0].end).subtract(0, "days");
 
     let daysInPeriod =
       moment
@@ -37,8 +38,13 @@ module.exports = {
     daysInPeriod = Math.round(daysInPeriod * 10) / 10;
 
     console.log("Days in Period are:", daysInPeriod);
-    console.log(periodEnd);
-    console.log(periodStart);
+    console.log(
+      "Dates ",
+      periodStart.format("MM-DD-YYYY"),
+      " through ",
+      periodEnd.format("MM-DD-YYYY")
+    );
+    // console.log("Ending Date is ", periodEnd.format("MM-DD-YYYY"));
 
     const currentPeriodDailyData = await db.Daily.findAll({
       where: {
