@@ -6,17 +6,27 @@ module.exports = {
       seederStorage: "sequelize"
     },
     meterReader: {
-      username: "apps",
-      password: "Password1",
-      database: "meterReader",
-      host: "192.168.1.100",
-      dialect: "postgres",
-      seederStorage: "sequelize",
-      logging: false,
+      dialect: "sqlite",
+      storage:
+        "C:/Users/dann/Documents/Javascript/meterReader/database.sqlite3",
       define: {
         //prevent sequelize from pluralizing table names
         freezeTableName: true
-      }
+      },
+      seederStorage: "sequelize"
+      // logging: console.log
+
+      // username: "apps",
+      // password: "Password1",
+      // database: "meterReader",
+      // host: "192.168.1.101",
+      // dialect: "postgres",
+      // seederStorage: "sequelize",
+      // logging: false,
+      // define: {
+      //   //prevent sequelize from pluralizing table names
+      //   freezeTableName: true
+      // }
     },
 
     dart: {
@@ -24,7 +34,7 @@ module.exports = {
       password: "Password1",
       database: "meterReader",
       schema: "dart",
-      host: "192.168.1.100",
+      host: "192.168.1.101",
       dialect: "postgres",
       seederStorage: "sequelize",
       logging: false,
@@ -38,7 +48,7 @@ module.exports = {
       username: "apps",
       password: "Password1",
       database: "meterReader",
-      host: "192.168.1.100",
+      host: "192.168.1.101",
       dialect: "postgres"
     }
   },
@@ -47,7 +57,7 @@ module.exports = {
     username: "sa",
     password: "Password1",
     database: "rentalApp",
-    host: "192.168.1.100",
+    host: "192.168.1.101",
     dialect: "mssql",
     dialectOptions: {
       encrypt: true,
@@ -67,7 +77,7 @@ module.exports = {
     username: "sa",
     password: "Password1",
     database: "meterReader",
-    host: "192.168.1.100",
+    host: "192.168.1.101",
     dialect: "mssql",
     dialectOptions: {
       encrypt: true,

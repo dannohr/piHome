@@ -39,8 +39,10 @@ class PeriodUsage extends React.Component {
             {
               beginAtZero: true,
               ticks: {
-                suggestedMin: 50,
-                suggestedMax: 100
+                min: 0,
+                max: 100
+                // suggestedMin: 50,
+                // suggestedMax: 100
               }
             }
           ]
@@ -185,8 +187,9 @@ class PeriodUsage extends React.Component {
           <div className="column middle">
             <div className="headline">
               Billing Period:{" "}
-              {moment(this.state.billingPeriod.billingStart).format("M/D/YY")}{" "}
-              to {moment(this.state.billingPeriod.billingEnd).format("M/D/YY")}
+              {moment(this.state.billingPeriod.billingStart).format("M/D/YYYY")}{" "}
+              to{" "}
+              {moment(this.state.billingPeriod.billingEnd).format("M/D/YYYY")}
             </div>
 
             <div className="linetwo">

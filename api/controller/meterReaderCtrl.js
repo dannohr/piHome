@@ -6,6 +6,8 @@ module.exports = {
   async get_this_period_daily_totals(req, res, next) {
     // Look up beginning and end dates for current billing period
 
+    console.log("today is ", moment().toDate());
+
     const currentPeriod = await db.BillPeriod.findAll({
       where: {
         // start date less than or equal to today
@@ -148,45 +150,47 @@ module.exports = {
       raw: true
     });
 
-    let previousDate = mostRecentManualReadData.previousDate;
+    if (mostRecentManualReadData) {
+      let previousDate = mostRecentManualReadData.previousDate;
 
-    let howOldIsLastRead = moment
-      .duration(moment().diff(moment(previousDate)))
-      .asDays();
+      let howOldIsLastRead = moment
+        .duration(moment().diff(moment(previousDate)))
+        .asDays();
 
-    consumptionSoFarTodayAsOfTime = moment(
-      mostRecentManualReadData.readTime
-    ).format("h:m a");
+      consumptionSoFarTodayAsOfTime = moment(
+        mostRecentManualReadData.readTime
+      ).format("h:m a");
 
-    consumptionSoFarTodayAsOfDate = moment(
-      mostRecentManualReadData.readTime
-    ).format("MM/DD");
-    console.log("last read is ", howOldIsLastRead);
-    //Assign values for yesterday (more than 2 days old wouldn't be yesterday)
-    let consumptionSoFarTodayAsOf = null;
-    if (howOldIsLastRead < 2) {
-      consumptionSoFarToday =
-        Math.round(mostRecentManualReadData.consumption * 10) / 10;
+      consumptionSoFarTodayAsOfDate = moment(
+        mostRecentManualReadData.readTime
+      ).format("MM/DD");
+      console.log("last read is ", howOldIsLastRead);
+      //Assign values for yesterday (more than 2 days old wouldn't be yesterday)
+      let consumptionSoFarTodayAsOf = null;
+      if (howOldIsLastRead < 2) {
+        consumptionSoFarToday =
+          Math.round(mostRecentManualReadData.consumption * 10) / 10;
 
-      yesterdayData = await db.Daily.findOne({
-        where: { meterDate: yesterday },
-        raw: true
-      });
+        yesterdayData = await db.Daily.findOne({
+          where: { meterDate: yesterday },
+          raw: true
+        });
 
-      consumptionYesterday = Math.round(yesterdayData.consumption * 10) / 10;
-    }
+        consumptionYesterday = Math.round(yesterdayData.consumption * 10) / 10;
+      }
 
-    if (howOldIsLastRead >= 2 && howOldIsLastRead < 3) {
-      console.log(mostRecentManualReadData);
-      console.log("Last Read is this old: ", howOldIsLastRead);
-      console.log(
-        "Read Time: ",
-        moment(mostRecentManualReadData.readTime).format("LLLL")
-      );
-      console.log(
-        "Previous Date: ",
-        moment(mostRecentManualReadData.previousDate).format("LLLL")
-      );
+      if (howOldIsLastRead >= 2 && howOldIsLastRead < 3) {
+        console.log(mostRecentManualReadData);
+        console.log("Last Read is this old: ", howOldIsLastRead);
+        console.log(
+          "Read Time: ",
+          moment(mostRecentManualReadData.readTime).format("LLLL")
+        );
+        console.log(
+          "Previous Date: ",
+          moment(mostRecentManualReadData.previousDate).format("LLLL")
+        );
+      }
 
       let beginningOfYesterday = moment(yesterday, "YYYY-MM-DD").startOf("day");
       // .format("LLLL");
