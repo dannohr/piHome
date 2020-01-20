@@ -13,8 +13,9 @@ module.exports = {
         //prevent sequelize from pluralizing table names
         freezeTableName: true
       },
-      seederStorage: "sequelize"
+      seederStorage: "sequelize",
       // logging: console.log
+      logging: false
 
       // username: "apps",
       // password: "Password1",

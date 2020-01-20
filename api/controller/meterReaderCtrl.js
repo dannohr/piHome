@@ -6,22 +6,21 @@ module.exports = {
   async get_this_period_daily_totals(req, res, next) {
     // Look up beginning and end dates for current billing period
 
-    console.log("today is ", moment().toDate());
-
     const currentPeriod = await db.BillPeriod.findAll({
       where: {
         // start date less than or equal to today
         start: {
-          [Op.lte]: moment().toDate()
+          [Op.lte]: moment()
         },
         // end date greater than or equal to today
         end: {
-          [Op.gte]: moment().toDate()
+          [Op.gte]: moment()
         }
       }
     });
 
     //Oringinally I thought needed to subtract one day, but now it looks like that's not the case.
+
     let periodStart = moment(currentPeriod[0].start).subtract(0, "days");
 
     let periodEnd = moment(currentPeriod[0].end).subtract(0, "days");
@@ -46,7 +45,6 @@ module.exports = {
       " through ",
       periodEnd.format("MM-DD-YYYY")
     );
-    // console.log("Ending Date is ", periodEnd.format("MM-DD-YYYY"));
 
     const currentPeriodDailyData = await db.Daily.findAll({
       where: {
@@ -78,6 +76,7 @@ module.exports = {
           (daysInPeriod - currentPeriodDailyData.length)) *
           10
       ) / 10;
+
     //Add Average daily consumption to the data, to be used in the chart
     var dailyData = currentPeriodDailyData.map(function(el) {
       var o = Object.assign({}, el);
