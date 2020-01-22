@@ -14,8 +14,8 @@ module.exports = {
         freezeTableName: true
       },
       seederStorage: "sequelize",
-      // logging: console.log
-      logging: false
+      logging: console.log
+      // logging: false
 
       // username: "apps",
       // password: "Password1",

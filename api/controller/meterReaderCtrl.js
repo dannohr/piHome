@@ -130,6 +130,7 @@ module.exports = {
     let yesterday = moment()
       .add(-1, "days")
       .format("YYYY-MM-DD");
+    console.log("yesterday is ", yesterday);
 
     let dayBeforeYesterday = moment()
       .add(-2, "days")
@@ -143,17 +144,23 @@ module.exports = {
       raw: true
     });
 
+    await console.log(mostRecentManualReadTime);
+
+    await console.log("xxxxxxxxxxxxxxxxx");
     // Lookup the manual read data for the time found above
     let mostRecentManualReadData = await db.OnDemand.findOne({
       where: { readTime: mostRecentManualReadTime[0].readTime },
       raw: true
     });
+    await console.log("xxxxxxxxxxxxxxxxx");
+
+    await console.log(mostRecentManualReadData);
 
     if (mostRecentManualReadData) {
       let previousDate = mostRecentManualReadData.previousDate;
 
       let howOldIsLastRead = moment
-        .duration(moment().diff(moment(previousDate)))
+        .duration(moment().diff(moment(previousDate, "YYYY-MM-DD")))
         .asDays();
 
       consumptionSoFarTodayAsOfTime = moment(
@@ -174,7 +181,8 @@ module.exports = {
           where: { meterDate: yesterday },
           raw: true
         });
-
+        console.log("-------------------------------");
+        console.log(yesterdayData);
         consumptionYesterday = Math.round(yesterdayData.consumption * 10) / 10;
       }
 
