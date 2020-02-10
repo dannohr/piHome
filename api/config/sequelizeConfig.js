@@ -7,8 +7,7 @@ module.exports = {
     },
     meterReader: {
       dialect: "sqlite",
-      storage:
-        "C:/Users/dann/Documents/Javascript/meterReader/database.sqlite3",
+      storage: "../../meterReader.sqlite3",
       define: {
         //prevent sequelize from pluralizing table names
         freezeTableName: true

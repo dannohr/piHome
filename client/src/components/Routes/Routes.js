@@ -10,6 +10,7 @@ import CalendarToolbar from "../Calendar/CalendarToolbar";
 import Weather from "../Weather/Weather";
 import NotFound from "../NotFound/NotFound";
 import ElectricUsage from "../ElectricUsage/ElectricUsage";
+import MeterReadForm from "../MeterReadForm/MeterReadForm";
 
 export default ({ childProps }) => (
   // <Router>
@@ -22,6 +23,7 @@ export default ({ childProps }) => (
     <Route path="/custom" component={CustomHeader} />
     <Route path="/outlet1" component={Calendar} />
     <Route path="/outlet2" component={CalendarToolbar} />
+    <Route path="/meterread" component={MeterReadForm} />
 
     {/* Finally, catch all unmatched routes */}
     <Route component={NotFound} />
