@@ -8,96 +8,103 @@ class DailyUsageTable extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      tableData: {
-        columns: [
-          {
-            field: "id",
-            title: "ID"
-          },
-          {
-            field: "meterDate",
-            title: "Read Date"
-          },
-          {
-            field: "consumption",
-            title: "kWh Used"
-          }
-        ],
-        data: [
-          {
-            id: 590,
-            meterDate: "2019-04-01",
-            startRead: 11925.763,
-            endRead: 11928.006,
-            consumption: 2.235,
-            createdAt: "2020-01-21T23:19:19.737Z",
-            updatedAt: "2020-01-21T23:19:19.737Z"
-          },
-          {
-            id: 591,
-            meterDate: "2019-04-02",
-            startRead: 11928.006,
-            endRead: 11931.11,
-            consumption: 3.101,
-            createdAt: "2020-01-21T23:19:19.739Z",
-            updatedAt: "2020-01-21T23:19:19.739Z"
-          },
-          {
-            id: 592,
-            meterDate: "2019-04-03",
-            startRead: 11931.11,
-            endRead: 11935.705,
-            consumption: 4.601,
-            createdAt: "2020-01-21T23:19:19.740Z",
-            updatedAt: "2020-01-21T23:19:19.740Z"
-          }
-        ]
-      }
+      isLoading: true,
+      columns: [
+        {
+          field: "meterDate",
+          title: "Read Date",
+          defaultSort: "desc"
+        },
+        {
+          field: "consumption",
+          title: "kWh Used"
+        },
+        {
+          field: "id",
+          title: "id"
+        }
+      ],
+      data: []
     };
   }
 
   componentDidMount() {
-    console.log(this.state);
-    // this.handleGetUsageData();
-    console.log(this.state);
+    this.handleGetUsageData();
   }
 
   handleGetUsageData() {
     axios
       .get("/api/meterReader/allDaily")
       .then(response => {
+        console.log("Data from Get All Request:");
         console.log(response.data);
-
-        // let labels = response.data.dataPoints.map(data =>
-        //   moment(data.start, "MM/DD/YYYY hh:mm a").format("LT")
-        // );
-
-        // let data = response.data.dataPoints.map(data => data.consumption);
-        // console.log(labels);
-        // console.log(data);
-        // this.setState({
-        //   chartData: {
-        //     labels: labels,
-        //     datasets: []
-        //   }
-        // });
+        this.setState({ data: response.data, isLoading: false });
       })
       .catch(function(error) {
         console.log(error);
       });
   }
 
+  handleAddUsageData(body) {
+    console.log("adding data, body is:");
+    console.log(body);
+    axios
+      .post("/api/meterReader/meterdata", body)
+      .then(response => {
+        console.log(response);
+        // this.setState({ data: response.data });
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+  }
+
+  handleDeleteUsageData = id => {
+    console.log("starting to delete");
+    console.log(id);
+    axios
+      .delete("/api/meterReader/meterdata/" + id)
+      .then(response => {
+        console.log(response);
+        this.handleGetUsageData();
+        // this.setState({ isLoading: true });
+
+        // this.setState({ data: response.data });
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+  };
+
+  handleUpdateUsageData = body => {
+    let id = body.id;
+    axios
+      .put("/api/meterReader/meterdata/" + id, body)
+      .then(response => {
+        console.log(response);
+        this.handleGetUsageData();
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+  };
+
   render() {
     return (
-      // <div className="container">
-      <DataTable
-        data={this.state.tableData.data}
-        columns={this.state.tableData.columns}
-      />
-      // </div>
+      <div className="container">
+        {this.state.isLoading ? null : (
+          <DataTable
+            data={this.state.data}
+            columns={this.state.columns}
+            title="Some Title"
+            handleDelete={this.handleDeleteUsageData}
+            handleAdd={this.handleAddUsageData}
+            handleUpdate={this.handleUpdateUsageData}
+          />
+        )}
+      </div>
     );
   }
 }
 
-// export default withStyles(styles, { withTheme: true })(DailyUsageTable);
 export default DailyUsageTable;

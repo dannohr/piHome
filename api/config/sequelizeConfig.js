@@ -10,10 +10,12 @@ module.exports = {
       storage: "../../meterReader.sqlite3",
       define: {
         //prevent sequelize from pluralizing table names
-        freezeTableName: true
+        freezeTableName: true,
+        timestamps: false
       },
       seederStorage: "sequelize",
       logging: console.log
+
       // logging: false
 
       // username: "apps",

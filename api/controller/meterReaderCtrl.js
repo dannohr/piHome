@@ -287,6 +287,17 @@ module.exports = {
     });
   },
 
+  async get_all(req, res, next) {
+    console.log("getting all daily meter read");
+
+    try {
+      const getAll = await db.Daily.findAll();
+      return res.status(201).json(getAll);
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
+  },
+
   async add_daily(req, res, next) {
     console.log("adding daily meter read");
     console.log("Data is: ", req.body);
@@ -301,13 +312,41 @@ module.exports = {
     }
   },
 
-  async get_all(req, res, next) {
-    console.log("getting all daily meter read");
+  async delete_daily(req, res, next) {
+    console.log("Deleting daily meter read");
+    console.log("Deleting ID: ", req.params.id);
 
     try {
-      const getAll = await db.Daily.findAll();
-      return res.status(201).json(getAll);
+      const del = await db.Daily.destroy({
+        where: {
+          id: req.params.id
+        }
+      });
+      return res.status(201).json({
+        del
+      });
     } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
+  },
+
+  async edit_daily(req, res, next) {
+    console.log("Editing daily meter read");
+    console.log("Deleting ID: ", req.params.id);
+    console.log("The body is:");
+    console.log(req.body);
+
+    try {
+      const update = await db.Daily.update(req.body, {
+        where: {
+          id: req.params.id
+        }
+      });
+      return res.status(201).json({
+        update
+      });
+    } catch (error) {
+      console.log(error);
       return res.status(500).json({ error: error.message });
     }
   }

@@ -130,17 +130,17 @@ class ButtonMenu extends React.Component {
             </ListItem>
           </Link>
 
-          <Link component={RouterLink} to="/cabinetlights">
+          <Link component={RouterLink} to="/dailyusagetable">
             <ListItem button key="4">
               <ListItemText
                 primary={
                   <Typography
                     style={menuItemStyle}
                     onClick={() =>
-                      this.props.updateHeaderTitle("Cabinet Lights")
+                      this.props.updateHeaderTitle("Electric Meter Data")
                     }
                   >
-                    Cabinet Lights
+                    Electric Meter Data
                   </Typography>
                 }
               />

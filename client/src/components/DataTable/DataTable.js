@@ -1,12 +1,4 @@
 import React from "react";
-import {
-  createMuiTheme,
-  //   makeStyles,
-  //   withStyles,
-  MuiThemeProvider
-} from "@material-ui/core/styles";
-import green from "@material-ui/core/colors/green";
-// import { Grid, Button } from "@material-ui/core";
 import MaterialTable from "material-table";
 
 const DataTable = function(props) {
@@ -15,54 +7,34 @@ const DataTable = function(props) {
       <MaterialTable
         columns={props.columns}
         data={props.data}
-        title="Daily Usage Data"
-        //   options={{
-        //     rowStyle: {
-        //       backgroundColor: "#EEE",
-        //       color: "black"
-        //     },
-        //     cellStyle: {
-        //       fontSize: 15
-        //     }
-        //   }}
+        title={props.title}
+        options={{
+          padding: "dense",
+          rowStyle: {
+            // backgroundColor: "#EEE",
+            color: "black"
+          },
+          cellStyle: {
+            fontSize: 12
+          },
+          sorting: true
+        }}
         editable={{
-          isEditable: rowData => rowData.name === "a", // only name(a) rows would be editable
-          isDeletable: rowData => rowData.name === "b", // only name(a) rows would be deletable
-
           onRowAdd: newData =>
+            // console.log(newData);
             new Promise((resolve, reject) => {
-              setTimeout(() => {
-                {
-                  /* const data = this.state.data;
-                          data.push(newData);
-                          this.setState({ data }, () => resolve()); */
-                }
-                resolve();
-              }, 1000);
+              props.handleAdd(newData);
+              resolve();
             }),
           onRowUpdate: (newData, oldData) =>
             new Promise((resolve, reject) => {
-              setTimeout(() => {
-                {
-                  /* const data = this.state.data;
-                          const index = data.indexOf(oldData);
-                          data[index] = newData;
-                          this.setState({ data }, () => resolve()); */
-                }
-                resolve();
-              }, 1000);
+              props.handleUpdate(newData);
+              resolve();
             }),
           onRowDelete: oldData =>
             new Promise((resolve, reject) => {
-              setTimeout(() => {
-                {
-                  /* let data = this.state.data;
-                          const index = data.indexOf(oldData);
-                          data.splice(index, 1);
-                          this.setState({ data }, () => resolve()); */
-                }
-                resolve();
-              }, 1000);
+              props.handleDelete(oldData.id);
+              resolve();
             })
         }}
       />
