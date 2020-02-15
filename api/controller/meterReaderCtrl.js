@@ -285,5 +285,30 @@ module.exports = {
           res.status(400).send(error);
         });
     });
+  },
+
+  async add_daily(req, res, next) {
+    console.log("adding daily meter read");
+    console.log("Data is: ", req.body);
+
+    try {
+      const post = await db.Daily.create(req.body);
+      return res.status(201).json({
+        post
+      });
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
+  },
+
+  async get_all(req, res, next) {
+    console.log("getting all daily meter read");
+
+    try {
+      const getAll = await db.Daily.findAll();
+      return res.status(201).json(getAll);
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
   }
 };

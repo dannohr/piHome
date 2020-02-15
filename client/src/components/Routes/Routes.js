@@ -11,6 +11,7 @@ import Weather from "../Weather/Weather";
 import NotFound from "../NotFound/NotFound";
 import ElectricUsage from "../ElectricUsage/ElectricUsage";
 import MeterReadForm from "../MeterReadForm/MeterReadForm";
+import DailyUsageTable from "../ElectricUsage/DailyUsageTable";
 
 export default ({ childProps }) => (
   // <Router>
@@ -24,6 +25,7 @@ export default ({ childProps }) => (
     <Route path="/outlet1" component={Calendar} />
     <Route path="/outlet2" component={CalendarToolbar} />
     <Route path="/meterread" component={MeterReadForm} />
+    <Route path="/dailyusagetable" component={DailyUsageTable} />
 
     {/* Finally, catch all unmatched routes */}
     <Route component={NotFound} />
