@@ -52,6 +52,7 @@ class DailyUsageTable extends React.Component {
       .post("/api/meterReader/meterdata", body)
       .then(response => {
         console.log(response);
+        this.handleGetUsageData();
         // this.setState({ data: response.data });
       })
       .catch(function(error) {
