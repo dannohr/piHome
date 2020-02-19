@@ -45,7 +45,7 @@ class DailyUsageTable extends React.Component {
       });
   }
 
-  handleAddUsageData(body) {
+  handleAddUsageData = body => {
     console.log("adding data, body is:");
     console.log(body);
     axios
@@ -58,7 +58,7 @@ class DailyUsageTable extends React.Component {
       .catch(function(error) {
         console.log(error);
       });
-  }
+  };
 
   handleDeleteUsageData = id => {
     console.log("starting to delete");
