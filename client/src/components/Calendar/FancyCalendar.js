@@ -1,11 +1,12 @@
 import React from "react";
 import axios from "axios";
-import BigCalendar from "react-big-calendar";
+import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 
 import "./react-big-calendar.css";
 
-const localizer = BigCalendar.momentLocalizer(moment); // or globalizeLocalizer
+// const localizer = BigCalendar.momentLocalizer(moment); // or globalizeLocalizer
+const localizer = momentLocalizer(moment);
 
 const ColoredDateCellWrapper = ({ children }) =>
   React.cloneElement(React.Children.only(children), {
@@ -52,7 +53,7 @@ class FancyCalendar extends React.Component {
 
   render() {
     return (
-      <BigCalendar
+      <Calendar
         events={this.state.events}
         views={["month", "week"]}
         step={60}

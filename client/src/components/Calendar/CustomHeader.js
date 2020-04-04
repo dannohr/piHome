@@ -1,5 +1,5 @@
 import React from "react";
-import BigCalendar from "react-big-calendar";
+import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import axios from "axios";
 
@@ -28,8 +28,8 @@ class CustomHeader extends React.Component {
   }
 
   render() {
-    const localizer = BigCalendar.momentLocalizer(moment); // or globalizeLocalizer
-
+    // const localizer = BigCalendar.momentLocalizer(moment); // or globalizeLocalizer
+    const localizer = momentLocalizer(moment);
     let MyCustomHeader = ({ label }) => (
       <div>
         {/* CUSTOM HEADER: */}
@@ -41,7 +41,7 @@ class CustomHeader extends React.Component {
     let MyOtherNestedComponent = () => <div> </div>;
 
     return (
-      <BigCalendar
+      <Calendar
         events={this.state.events}
         localizer={localizer}
         defaultDate={new Date(2019, 5, 12)}

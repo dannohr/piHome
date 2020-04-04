@@ -1,5 +1,5 @@
 import React from "react";
-import BigCalendar from "react-big-calendar";
+import { Calendar, momentLocalizer } from "react-big-calendar";
 import "./react-big-calendar.css";
 import moment from "moment";
 
@@ -24,7 +24,8 @@ let events = [
   }
 ];
 
-const localizer = BigCalendar.momentLocalizer(moment);
+// const localizer = BigCalendar.momentLocalizer(moment);
+const localizer = momentLocalizer(moment);
 
 function Event({ event }) {
   return (
@@ -84,9 +85,9 @@ const ColoredDateCellWrapper = ({ children }) =>
     }
   });
 
-const Calendar = props => (
+const CalendarTest = props => (
   <div>
-    <BigCalendar
+    <Calendar
       events={events}
       views={["month", "week"]}
       step={60}
@@ -114,4 +115,4 @@ const Calendar = props => (
   </div>
 );
 
-export default Calendar;
+export default CalendarTest;
