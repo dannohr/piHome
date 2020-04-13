@@ -3,7 +3,7 @@ module.exports = {
     local: {
       dialect: "sqlite",
       storage: "../db/piHome.db",
-      seederStorage: "sequelize"
+      seederStorage: "sequelize",
     },
     meterReader: {
       dialect: "sqlite",
@@ -11,10 +11,10 @@ module.exports = {
       define: {
         //prevent sequelize from pluralizing table names
         freezeTableName: true,
-        timestamps: false
+        timestamps: false,
       },
       seederStorage: "sequelize",
-      logging: console.log
+      // logging: console.log
 
       // logging: false
 
@@ -42,8 +42,8 @@ module.exports = {
       logging: false,
       define: {
         //prevent sequelize from pluralizing table names
-        freezeTableName: true
-      }
+        freezeTableName: true,
+      },
     },
 
     pg: {
@@ -51,8 +51,8 @@ module.exports = {
       password: "Password1",
       database: "meterReader",
       host: "192.168.1.101",
-      dialect: "postgres"
-    }
+      dialect: "postgres",
+    },
   },
 
   test: {
@@ -65,14 +65,14 @@ module.exports = {
       encrypt: true,
       options: {
         requestTimeout: 60000,
-        port: 1433
-      }
+        port: 1433,
+      },
     },
     define: {
-      freezeTableName: true
+      freezeTableName: true,
     },
     seederStorage: "sequelize",
-    logging: false
+    logging: false,
     // logging: console.log
   },
   meterReader: {
@@ -85,14 +85,14 @@ module.exports = {
       encrypt: true,
       options: {
         requestTimeout: 60000,
-        port: 1433
-      }
+        port: 1433,
+      },
     },
     define: {
-      freezeTableName: true
+      freezeTableName: true,
     },
     seederStorage: "sequelize",
-    logging: false
+    logging: false,
     // logging: console.log
   },
   production: {
@@ -101,6 +101,6 @@ module.exports = {
     database: process.env.DB_NAME,
     host: process.env.DB_HOSTNAME,
     dialect: "mysql",
-    use_env_variable: "DATABASE_URL"
-  }
+    use_env_variable: "DATABASE_URL",
+  },
 };

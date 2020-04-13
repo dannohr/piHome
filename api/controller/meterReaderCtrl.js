@@ -10,20 +10,20 @@ module.exports = {
       where: {
         // start date less than or equal to today
         start: {
-          [Op.lte]: moment()
+          [Op.lte]: moment(),
         },
         // end date greater than or equal to today
         end: {
-          [Op.gte]: moment()
-        }
-      }
+          [Op.gte]: moment(),
+        },
+      },
     });
 
     //Oringinally I thought needed to subtract one day, but now it looks like that's not the case.
 
-    let periodStart = moment(currentPeriod[0].start).subtract(0, "days");
+    let periodStart = moment(currentPeriod[0].start).subtract(1, "days");
 
-    let periodEnd = moment(currentPeriod[0].end).subtract(0, "days");
+    let periodEnd = moment(currentPeriod[0].end).subtract(1, "days");
 
     let daysInPeriod =
       moment
@@ -49,12 +49,12 @@ module.exports = {
     const currentPeriodDailyData = await db.Daily.findAll({
       where: {
         meterDate: {
-          [Op.gte]: periodStart
-        }
+          [Op.gte]: periodStart,
+        },
       },
       order: [["meterDate", "asc"]],
       attributes: ["meterDate", "startRead", "endRead", "consumption"],
-      raw: true //converts what comes back from Sequalize into just a plain object
+      raw: true, //converts what comes back from Sequalize into just a plain object
     });
 
     let totalConsumption =
@@ -78,7 +78,7 @@ module.exports = {
       ) / 10;
 
     //Add Average daily consumption to the data, to be used in the chart
-    var dailyData = currentPeriodDailyData.map(function(el) {
+    var dailyData = currentPeriodDailyData.map(function (el) {
       var o = Object.assign({}, el);
       o.avgDailyConsumption = avgDailyConsumption;
       o.avgEstReminingConsumption = avgEstReminingConsumption;
@@ -87,7 +87,7 @@ module.exports = {
 
     // Find The last date we have data for
     // Create an array of all dates in the data returned from api
-    let dates = currentPeriodDailyData.map(function(x) {
+    let dates = currentPeriodDailyData.map(function (x) {
       return moment(x.meterDate, "YYYY-MM-DD");
     });
 
@@ -99,9 +99,7 @@ module.exports = {
     // Using this to make sure we show a whole month at a time on the graph, and as days progress
     // more of the month gets filled in.  Can graphically see how far into the month you are.
 
-    let dateToAdd = moment(lastDate)
-      .add(1, "days")
-      .format("YYYY-MM-DD");
+    let dateToAdd = moment(lastDate).add(1, "days").format("YYYY-MM-DD");
 
     // Loop through and add the next date to the data set until you get to the last day of the period
     while (
@@ -110,7 +108,7 @@ module.exports = {
     ) {
       dailyData.push({
         meterDate: dateToAdd,
-        avgEstReminingConsumption: avgEstReminingConsumption
+        avgEstReminingConsumption: avgEstReminingConsumption,
       });
 
       dateToAdd = moment(dateToAdd, "YYYY-MM-DD")
@@ -127,21 +125,17 @@ module.exports = {
     let consumptionSoFarTodayAsOfDate = null;
     let consumptionYesterday = 0;
 
-    let yesterday = moment()
-      .add(-1, "days")
-      .format("YYYY-MM-DD");
+    let yesterday = moment().add(-1, "days").format("YYYY-MM-DD");
     console.log("yesterday is ", yesterday);
 
-    let dayBeforeYesterday = moment()
-      .add(-2, "days")
-      .format("YYYY-MM-DD");
+    let dayBeforeYesterday = moment().add(-2, "days").format("YYYY-MM-DD");
 
     // Find the date/time of the last manual read
     let mostRecentManualReadTime = await db.OnDemand.findAll({
       attributes: [
-        [db.sequelize.fn("max", db.sequelize.col("readTime")), "readTime"]
+        [db.sequelize.fn("max", db.sequelize.col("readTime")), "readTime"],
       ],
-      raw: true
+      raw: true,
     });
 
     await console.log(mostRecentManualReadTime);
@@ -150,7 +144,7 @@ module.exports = {
     // Lookup the manual read data for the time found above
     let mostRecentManualReadData = await db.OnDemand.findOne({
       where: { readTime: mostRecentManualReadTime[0].readTime },
-      raw: true
+      raw: true,
     });
     await console.log("xxxxxxxxxxxxxxxxx");
 
@@ -179,7 +173,7 @@ module.exports = {
 
         yesterdayData = await db.Daily.findOne({
           where: { meterDate: yesterday },
-          raw: true
+          raw: true,
         });
         console.log("-------------------------------");
         console.log(yesterdayData);
@@ -211,18 +205,18 @@ module.exports = {
       let yesterdayLastManualReadTime = await db.OnDemand.findAll({
         where: {
           readTime: {
-            [Op.between]: [beginningOfYesterday, endOfYesterday]
-          }
+            [Op.between]: [beginningOfYesterday, endOfYesterday],
+          },
         },
         attributes: [
-          [db.sequelize.fn("max", db.sequelize.col("readTime")), "readTime"]
+          [db.sequelize.fn("max", db.sequelize.col("readTime")), "readTime"],
         ],
-        raw: true
+        raw: true,
       });
 
       let yesterdayManualReadData = await db.OnDemand.findOne({
         where: { readTime: yesterdayLastManualReadTime[0].readTime },
-        raw: true
+        raw: true,
       });
 
       console.log("Yesterday Manual Read Data");
@@ -255,10 +249,168 @@ module.exports = {
         consumptionSoFarToday: consumptionSoFarToday,
         consumptionSoFarTodayAsOfTime: consumptionSoFarTodayAsOfTime,
         consumptionSoFarTodayAsOfDate: consumptionSoFarTodayAsOfDate,
-        consumptionYesterday: consumptionYesterday
+        consumptionYesterday: consumptionYesterday,
       },
-      dailyData: dailyData
+      dailyData: dailyData,
     });
+  },
+
+  async get_period_data_for_date(req, res, next) {
+    console.log(req.params.date);
+
+    let dateToUse = req.params.date
+      ? moment(req.params.date).subtract(0, "days").format("YYYY-MM-DD")
+      : moment();
+
+    console.log("Date using for lookup", dateToUse);
+
+    const currentPeriod = await db.BillPeriod.findAll({
+      where: {
+        // start date less than or equal to today
+        start: {
+          [Op.lte]: dateToUse,
+        },
+        // end date greater than or equal to today
+        end: {
+          [Op.gte]: dateToUse,
+        },
+      },
+      raw: true,
+    });
+
+    console.log("-----------------------------------------------");
+    console.log(currentPeriod);
+    console.log("-----------------------------------------------");
+
+    let periodStart = moment(currentPeriod[0].start).subtract(0, "days");
+
+    let periodEnd = moment(currentPeriod[0].end).subtract(0, "days");
+
+    let daysInPeriod =
+      moment
+        .duration(
+          moment(periodEnd, "YYYY-MM-DD").diff(
+            moment(periodStart, "YYYY-MM-DD")
+          )
+        )
+        .asDays() + 1;
+
+    // round to no decimal places, the following returned a non interger.  In October 2019 got 30.04 instead of 30 days
+
+    daysInPeriod = Math.round(daysInPeriod * 10) / 10;
+
+    console.log("Days in Period are:", daysInPeriod);
+    console.log(
+      "Dates ",
+      periodStart.format("MM-DD-YYYY"),
+      " through ",
+      periodEnd.format("MM-DD-YYYY")
+    );
+
+    const currentPeriodDailyData = await db.Daily.findAll({
+      where: {
+        meterDate: {
+          [Op.between]: [periodStart, periodEnd],
+        },
+      },
+
+      order: [["meterDate", "asc"]],
+      attributes: ["meterDate", "startRead", "endRead", "consumption"],
+      raw: true, //converts what comes back from Sequalize into just a plain object
+    });
+
+    let totalConsumption =
+      Math.round(
+        currentPeriodDailyData.reduce(
+          (sum, { consumption }) => sum + consumption * 1,
+          0
+        ) * 10
+      ) / 10;
+
+    // Calcuate average daily consumption
+    let avgDailyConsumption =
+      Math.round((totalConsumption / currentPeriodDailyData.length) * 10) / 10;
+
+    // Calculate what average consumption can be for the remaining period and not go over 1,000 kWh per period
+    let avgEstReminingConsumption =
+      Math.round(
+        ((1000 - totalConsumption) /
+          (daysInPeriod - currentPeriodDailyData.length)) *
+          10
+      ) / 10;
+
+    //Add Average daily consumption to the data, to be used in the chart
+    var dailyData = currentPeriodDailyData.map(function (el) {
+      var o = Object.assign({}, el);
+      o.avgDailyConsumption = avgDailyConsumption;
+      o.avgEstReminingConsumption = avgEstReminingConsumption;
+      return o;
+    });
+
+    // Find The last date we have data for
+    // Create an array of all dates in the data returned from api
+    let dates = currentPeriodDailyData.map(function (x) {
+      return moment(x.meterDate, "YYYY-MM-DD");
+    });
+
+    // Find the max
+    let lastDate = Math.max.apply(null, dates);
+    let lastDateWithData = moment(lastDate).format("YYYY-MM-DD");
+
+    // Build out daily data array to include the days in the future that are in this period
+    // Using this to make sure we show a whole month at a time on the graph, and as days progress
+    // more of the month gets filled in.  Can graphically see how far into the month you are.
+
+    let dateToAdd = moment(lastDate).add(1, "days").format("YYYY-MM-DD");
+
+    // Loop through and add the next date to the data set until you get to the last day of the period
+    while (
+      moment(dateToAdd).format("YYYY-MM-DD") <=
+      moment(periodEnd).format("YYYY-MM-DD")
+    ) {
+      dailyData.push({
+        meterDate: dateToAdd,
+        avgEstReminingConsumption: avgEstReminingConsumption,
+      });
+
+      dateToAdd = moment(dateToAdd, "YYYY-MM-DD")
+        .add(1, "days")
+        .format("YYYY-MM-DD");
+    }
+
+    return res.status(200).send({
+      billingPeriod: {
+        billingStart: periodStart.format("YYYY-MM-DD"),
+        billingEnd: periodEnd.format("YYYY-MM-DD"),
+        daysInPeriod: daysInPeriod,
+        daysIntoPeriod: currentPeriodDailyData.length,
+        lastDateWithData: lastDateWithData,
+        daysToGoInPeriod: daysInPeriod - currentPeriodDailyData.length,
+        totalConsumption: totalConsumption,
+        avgDailyConsumption: avgDailyConsumption,
+        avgEstReminingConsumption: avgEstReminingConsumption,
+      },
+      dailyData: dailyData,
+    });
+
+    // return db.Interval.max("startDateTime").then((max) => {
+    //   console.log("Last day with data is:");
+    //   console.log(max);
+    //   let queryDate = moment(max).format("YYYY-MM-DD");
+    //   console.log(queryDate);
+
+    //   db.Interval.findAll({
+    //     where: {
+    //       meterDate: queryDate,
+    //     },
+    //   })
+    //     .then((data) =>
+    //       res.status(200).send({ lastDate: queryDate, dataPoints: data })
+    //     )
+    //     .catch((error) => {
+    //       res.status(400).send(error);
+    //     });
+    // });
   },
 
   get_today(req, res, next) {
@@ -267,7 +419,7 @@ module.exports = {
     console.log("getting all meter data");
     console.log("today is: ", today);
 
-    return db.Interval.max("startDateTime").then(max => {
+    return db.Interval.max("startDateTime").then((max) => {
       console.log("Last day with data is:");
       console.log(max);
       let queryDate = moment(max).format("YYYY-MM-DD");
@@ -275,13 +427,13 @@ module.exports = {
 
       db.Interval.findAll({
         where: {
-          meterDate: queryDate
-        }
+          meterDate: queryDate,
+        },
       })
-        .then(data =>
+        .then((data) =>
           res.status(200).send({ lastDate: queryDate, dataPoints: data })
         )
-        .catch(error => {
+        .catch((error) => {
           res.status(400).send(error);
         });
     });
@@ -305,7 +457,7 @@ module.exports = {
     try {
       const post = await db.Daily.create(req.body);
       return res.status(201).json({
-        post
+        post,
       });
     } catch (error) {
       console.log(error);
@@ -320,11 +472,11 @@ module.exports = {
     try {
       const del = await db.Daily.destroy({
         where: {
-          id: req.params.id
-        }
+          id: req.params.id,
+        },
       });
       return res.status(201).json({
-        del
+        del,
       });
     } catch (error) {
       return res.status(500).json({ error: error.message });
@@ -340,15 +492,15 @@ module.exports = {
     try {
       const update = await db.Daily.update(req.body, {
         where: {
-          id: req.params.id
-        }
+          id: req.params.id,
+        },
       });
       return res.status(201).json({
-        update
+        update,
       });
     } catch (error) {
       console.log(error);
       return res.status(500).json({ error: error.message });
     }
-  }
+  },
 };

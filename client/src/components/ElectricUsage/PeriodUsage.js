@@ -29,28 +29,24 @@ class PeriodUsage extends React.Component {
           pointHoverBorderWidth: 2,
           pointRadius: 1,
           pointHitRadius: 10,
-          data: []
-        }
+          data: [],
+        },
       ],
       options: {
         maintainAspectRatio: false,
         scales: {
           yAxes: [
             {
-              beginAtZero: true,
               ticks: {
                 min: 0,
-                max: 100
-                // suggestedMin: 50,
-                // suggestedMax: 100
-              }
-            }
-          ]
-        }
-      }
+              },
+            },
+          ],
+        },
+      },
     },
     billingPeriod: {},
-    usageData: []
+    usageData: [],
   };
 
   componentDidMount() {
@@ -75,25 +71,25 @@ class PeriodUsage extends React.Component {
 
   handleGetElectricData() {
     axios
-      .get("/api/meterReader/currentPeriod")
-      .then(response => {
+      .get("/api/meterReader/perioddata/" + moment().format("YYYY-MM-DD"))
+      .then((response) => {
         console.log(response.data);
         this.setState({
           billingPeriod: response.data.billingPeriod,
-          usageData: response.data.dailyData
+          usageData: response.data.dailyData,
         });
 
-        let labels = response.data.dailyData.map(data =>
+        let labels = response.data.dailyData.map((data) =>
           moment(data.meterDate, "YYYY-MM-DD").format("ddd, MMM Do")
         );
 
-        let dailyData = response.data.dailyData.map(data => data.consumption);
+        let dailyData = response.data.dailyData.map((data) => data.consumption);
         let avgDailyConsumption = response.data.dailyData.map(
-          data => data.avgDailyConsumption
+          (data) => data.avgDailyConsumption
         );
 
         let avgEstReminingConsumption = response.data.dailyData.map(
-          data => data.avgEstReminingConsumption
+          (data) => data.avgEstReminingConsumption
         );
 
         this.setState({
@@ -119,7 +115,7 @@ class PeriodUsage extends React.Component {
                 pointHoverBorderWidth: 2,
                 pointRadius: 1,
                 pointHitRadius: 10,
-                data: dailyData
+                data: dailyData,
               },
               {
                 label: "Average Usage (kWh)",
@@ -140,7 +136,7 @@ class PeriodUsage extends React.Component {
                 pointHoverBorderWidth: 2,
                 pointRadius: 1,
                 pointHitRadius: 10,
-                data: avgDailyConsumption
+                data: avgDailyConsumption,
               },
               {
                 label: "Average Remaining (kWh)",
@@ -161,13 +157,13 @@ class PeriodUsage extends React.Component {
                 pointHoverBorderWidth: 2,
                 pointRadius: 1,
                 pointHitRadius: 10,
-                data: avgEstReminingConsumption
-              }
-            ]
-          }
+                data: avgEstReminingConsumption,
+              },
+            ],
+          },
         });
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log(error);
       });
   }
@@ -177,10 +173,10 @@ class PeriodUsage extends React.Component {
       <div>
         <div className="row">
           <div className="column left">
-            <div className="linetwo">Yesterday</div>
+            {/* <div className="linetwo">Yesterday</div>
             <div className="headline">
               {this.state.billingPeriod.consumptionYesterday} kWh
-            </div>
+            </div> */}
             <div className="linetwo"> </div>
           </div>
 
@@ -206,14 +202,14 @@ class PeriodUsage extends React.Component {
           </div>
 
           <div className="column right">
-            <div className="linetwo">Today</div>
+            {/* <div className="linetwo">Today</div>
             <div className="headline">
               {this.state.billingPeriod.consumptionSoFarToday} kWh
             </div>
             <div className="linetwo">
               {" "}
               As of {this.state.billingPeriod.consumptionSoFarTodayAsOfTime}
-            </div>
+            </div> */}
           </div>
         </div>
 
@@ -221,7 +217,7 @@ class PeriodUsage extends React.Component {
           <article className="canvas-container">
             <Line
               data={this.state.chartData}
-              options={{ maintainAspectRatio: false }}
+              options={this.state.chartData.options}
             />
           </article>
         </div>
