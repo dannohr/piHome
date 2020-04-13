@@ -4,7 +4,8 @@ var router = express.Router();
 var meterReaderCtrl = require("../controller/meterReaderCtrl");
 
 router.get("/today", meterReaderCtrl.get_today);
-router.get("/currentPeriod", meterReaderCtrl.get_this_period_daily_totals);
+// router.get("/currentPeriod", meterReaderCtrl.get_this_period_daily_totals);
+router.get("/perioddata/:date", meterReaderCtrl.get_period_data_for_date);
 router.get("/allDaily", meterReaderCtrl.get_all);
 router.post("/meterdata", meterReaderCtrl.add_daily);
 router.put("/meterdata/:id", meterReaderCtrl.edit_daily);

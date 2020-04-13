@@ -6,22 +6,15 @@ module.exports = (sequelize, DataTypes) => {
       id: {
         primaryKey: true,
         type: DataTypes.INTEGER,
-        autoIncrement: true
+        autoIncrement: true,
       },
 
       start: DataTypes.DATEONLY,
-      end: DataTypes.DATEONLY
+      end: DataTypes.DATEONLY,
+      readDate: DataTypes.DATEONLY,
     },
     {}
   );
-
-  // Daily.associate = models => {
-  //   // Company.hasMany(models.UserCompany, {});
-  //   Daily.belongsToMany(models.User, {
-  //     through: models.UserCompany
-  //   });
-  //   Daily.belongsTo(models.Address, {});
-  // };
 
   return BillPeriod;
 };
