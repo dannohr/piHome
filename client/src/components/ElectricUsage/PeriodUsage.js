@@ -58,7 +58,7 @@ class PeriodUsage extends React.Component {
         // this.handleGetCurrentWeatherOpenweather();
         this.handleGetElectricData();
 
-        console.log("Updated Weather Info");
+        console.log("Updated Electric Data");
       },
       1800000 // refresh every 1,800 seconds, 30 mins
     );

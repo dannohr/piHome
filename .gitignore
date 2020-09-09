@@ -18,3 +18,5 @@ api/config/config.json
 api/config/token.json
 api/config/oldtoken.json
 api/config/sequelizeConfig.js
+api/config/certs/cert.pem
+api/config/certs/privkey.pem

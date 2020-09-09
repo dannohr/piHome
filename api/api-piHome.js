@@ -13,6 +13,7 @@ const stocksRouter = require("./routes/stocks");
 const calendarRouter = require("./routes/calendar");
 const meterReaderRouter = require("./routes/meterReader");
 const dartRouter = require("./routes/dart");
+const electricMeterRouter = require("./routes/electricMeter");
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -28,6 +29,7 @@ app.use("/api/weather", weatherRouter);
 app.use("/api/stocks", stocksRouter);
 app.use("/api/calendar", calendarRouter);
 app.use("/api/meterReader", meterReaderRouter);
+app.use("/api/electricMeter", electricMeterRouter);
 app.use("/api/dart", dartRouter);
 
 app.listen(port, () => {
