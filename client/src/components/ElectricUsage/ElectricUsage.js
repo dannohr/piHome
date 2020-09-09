@@ -1,38 +1,120 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 // import ButtonChart from "../ButtonChart/ButtonChart";
-// import DailyUsage from "./DailyUsage";
-import PeriodUsage from "./PeriodUsage";
+import UsageChart from "./UsageChart";
+// import PeriodUsage from "./PeriodUsage";
+import axios from "axios";
+import moment from "moment";
 
 import "./ElectricUsage.css";
 
-class ElectricUsage extends React.Component {
-  state = { view: "daily" };
+const ElectricUsage = () => {
+  const [billingPeriod, setBillingPeriod] = useState({});
+  const [dailyData, setDailyData] = useState({});
+  // const [dataDate, setDataDate] = useState(moment().format("YYYY-MM-DD"));
+  const [dataDate, setDataDate] = useState("2020-09-01");
+  const [usedYesterday, setUsedyesterday] = useState(0);
 
-  render() {
-    return (
-      <div>
-        {/* <div>
-          <table>
-            <thead>
-              <tr>
-                <td className="leftbttn">
-                  <ButtonChart />
-                </td>
-                <td className="middlebttn">
-                  <ButtonChart text={"someting"} />
-                </td>
-                <td className="rightbttn">
-                  <ButtonChart />
-                </td>
-              </tr>
-            </thead>
-          </table>
-        </div> */}
+  const [todayUsageSummary, setTodayUsageSummary] = useState({
+    consumptionSoFarToday: 0,
+    consumptionSoFarTodayAsOfTime: "1:10pm",
+  });
 
-        <PeriodUsage />
+  useEffect(() => {
+    console.log("trying to get daily");
+
+    async function fetchPeriodDailyData() {
+      if (billingPeriod.billingStart) {
+        let data = {
+          startDate: moment(billingPeriod.billingStart).format("MM/DD/YYYY"),
+          endDate: moment(billingPeriod.billingEnd).format("MM/DD/YYYY"),
+        };
+        // Don't request data until the other useEffect has set the data range
+        console.log("getting data for data range", data);
+
+        await axios
+          .put("/api/electricMeter/perioddailydata", { data })
+          .then((response) => {
+            console.log(response.data);
+            setDailyData(response.data);
+          });
+      }
+    }
+
+    fetchPeriodDailyData();
+  }, [billingPeriod]);
+
+  useEffect(() => {
+    async function fetchDateRange() {
+      await axios
+        .get("/api/electricMeter/perioddatarange/" + dataDate)
+        .then((response) => {
+          setBillingPeriod(response.data.billingPeriod);
+          console.log(response.data);
+        });
+    }
+
+    fetchDateRange();
+
+    console.log(dataDate);
+  }, [dataDate]);
+
+  return (
+    <div>
+      <div className="row">
+        <div className="column left">
+          <div className="linetwo">Yesterday</div>
+          <div className="headline">{usedYesterday} kWh</div>
+          <div className="linetwo"> </div>
+        </div>
+
+        <div className="column middle">
+          <div className="headline">
+            Billing Period:{" "}
+            {moment(billingPeriod.billingStart).format("M/D/YYYY")} to{" "}
+            {moment(billingPeriod.billingEnd).format("M/D/YYYY")}
+          </div>
+
+          {dailyData.billingPeriod && (
+            <div>
+              <div className="linetwo">
+                {dailyData.billingPeriod.daysIntoPeriod} days into period,{" "}
+                {billingPeriod.daysInPeriod -
+                  dailyData.billingPeriod.daysIntoPeriod}{" "}
+                days remaining
+              </div>
+
+              <div className="linethree">
+                {Math.round(dailyData.billingPeriod.totalConsumption * 10) / 10}{" "}
+                kWh used for an average of{" "}
+                {Math.round(dailyData.billingPeriod.avgDailyConsumption * 10) /
+                  10}{" "}
+                per day
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="column right">
+          <div className="linetwo">Today</div>
+          <div className="headline">
+            {todayUsageSummary.consumptionSoFarToday} kWh
+          </div>
+          <div className="linetwo">
+            {" "}
+            As of {todayUsageSummary.consumptionSoFarTodayAsOfTime}
+          </div>
+        </div>
       </div>
-    );
-  }
-}
+      <div>
+        <UsageChart
+          labels={[1, 2, 3]}
+          avgDailyConsumption={dailyData.billingPeriod.avgDailyConsumption}
+          dailyData={1}
+          avgEstReminingConsumption={20}
+        />
+      </div>
+    </div>
+  );
+};
 
 export default ElectricUsage;

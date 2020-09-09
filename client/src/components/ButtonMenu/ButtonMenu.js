@@ -15,27 +15,27 @@ import "./ButtonMenu.css";
 
 const styles = {
   list: {
-    width: 250
+    width: 250,
   },
   fullList: {
-    width: "auto"
-  }
+    width: "auto",
+  },
 };
 
 const menuItemStyle = {
   color: "#ff6f00",
   textAlign: "right",
-  fontSize: "25px"
+  fontSize: "25px",
 };
 
 class ButtonMenu extends React.Component {
   state = {
-    left: false
+    left: false,
   };
 
   toggleDrawer = (side, open) => () => {
     this.setState({
-      left: open
+      left: open,
     });
   };
 
@@ -106,6 +106,24 @@ class ButtonMenu extends React.Component {
                     }
                   >
                     Electricty
+                  </Typography>
+                }
+              />
+            </ListItem>
+          </Link>
+
+          <Link component={RouterLink} to="/newelectricusage">
+            <ListItem button key="9">
+              <ListItemText
+                primary={
+                  <Typography
+                    variant="h6"
+                    style={menuItemStyle}
+                    onClick={() =>
+                      this.props.updateHeaderTitle("Electric Tracking")
+                    }
+                  >
+                    New Electricty
                   </Typography>
                 }
               />
@@ -211,7 +229,7 @@ class ButtonMenu extends React.Component {
 }
 
 ButtonMenu.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles)(ButtonMenu);
