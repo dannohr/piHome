@@ -11,7 +11,7 @@ const ElectricUsage = () => {
   const [billingPeriod, setBillingPeriod] = useState({});
   const [dailyData, setDailyData] = useState({});
   // const [dataDate, setDataDate] = useState(moment().format("YYYY-MM-DD"));
-  const [dataDate, setDataDate] = useState("2020-09-01");
+  const [dataDate, setDataDate] = useState("2020-09-08");
   const [usedYesterday, setUsedyesterday] = useState(0);
 
   const [todayUsageSummary, setTodayUsageSummary] = useState({
@@ -106,12 +106,14 @@ const ElectricUsage = () => {
         </div>
       </div>
       <div>
-        <UsageChart
-          labels={[1, 2, 3]}
-          avgDailyConsumption={dailyData.billingPeriod.avgDailyConsumption}
-          dailyData={1}
-          avgEstReminingConsumption={20}
-        />
+        {dailyData.charting && (
+          <UsageChart
+            labels={dailyData.charting.chartLabels}
+            avgDailyConsumption={dailyData.charting.avgDailyConsumption}
+            dailyData={dailyData.charting.daily}
+            avgRemaining={dailyData.charting.avgRemaining}
+          />
+        )}
       </div>
     </div>
   );

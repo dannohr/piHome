@@ -81,17 +81,13 @@ module.exports = {
   },
 
   async get_period_daily_data(req, res, next) {
-    console.log("------------------");
-    console.log(req.body);
-    console.log("------------------");
-
+    // Define the starting and ending dates.  If the ending date is after today
+    // use today's date or the Smart Meter API will reject the request
     let startDate = req.body.data.startDate;
-    let endDate = !moment(req.body.data.endDate, "MM/DD/YYYY").isBefore(
-      moment(),
-      "day"
-    )
+    let endDate = req.body.data.endDate;
+    let apiEndDate = !moment(endDate, "MM/DD/YYYY").isBefore(moment(), "day")
       ? moment().format("MM/DD/YYYY")
-      : req.body.data.endDate;
+      : endDate;
 
     await instance({
       method: "post",
@@ -101,7 +97,7 @@ module.exports = {
         requestorID: username,
         requesterType: "RES",
         startDate: startDate,
-        endDate: endDate,
+        endDate: apiEndDate,
         reportFormat: "JSON",
         version: "L",
         readingType: "c",
@@ -115,8 +111,11 @@ module.exports = {
       },
     })
       .then((response) => {
+        // Array of the daily meter read data
         let dailyData = response.data.registeredReads;
+        console.log(dailyData);
 
+        // Sum the consumption between the starting and ending dates
         let totalConsumption = response.data.registeredReads.reduce(function (
           a,
           b
@@ -126,20 +125,85 @@ module.exports = {
         0);
 
         let lastDateWithData = dailyData[dailyData.length - 1].readDate;
-        let avgDailyConsumption = totalConsumption / dailyData.length;
+        let avgDailyConsumption = (totalConsumption / dailyData.length).toFixed(
+          3
+        );
+        let reminingConsumption = Math.max(0, 1000 - totalConsumption).toFixed(
+          3
+        );
 
-        let avgEstReminingConsumption = Math.max(0, 1000 - totalConsumption);
+        // Remaining days in the period, with no data provided by API
+        let numDaysMissingData = moment(endDate, "MM/DD/YYYY").diff(
+          moment(lastDateWithData, "MM/DD/YYYY"),
+          "days"
+        );
+
+        let avgDailyRemainingConsumption = (
+          reminingConsumption / numDaysMissingData
+        ).toFixed(3);
+
+        // Add average daily usage field to the existing data pulled from API
+        dailyData.forEach((obj) => {
+          obj.avgDailyConsumption = avgDailyConsumption;
+        });
+
+        // Build out daily data array to include the days in the future that are in this period
+        // Using this to make sure we show a whole month at a time on the graph, and as days progress
+        // more of the month gets filled in.  Can graphically see how far into the month you are.
+
+        let dateToAdd = moment(lastDateWithData, "MM/DD/YYYY")
+          .add(1, "days")
+          .format("MM/DD/YYYY");
+
+        // Loop through and add the next date to the data set until you get to the last day of the period
+        while (
+          moment(dateToAdd, "MM/DD/YYYY") <= moment(endDate, "MM/DD/YYYY")
+        ) {
+          dailyData.push({
+            readDate: dateToAdd,
+            avgDailyRemainingConsumption: avgDailyRemainingConsumption,
+            avgDailyConsumption: avgDailyConsumption,
+          });
+
+          dateToAdd = moment(dateToAdd, "MM/DD/YYYY")
+            .add(1, "days")
+            .format("MM/DD/YYYY");
+        }
+
+        // create an array of just the dates, to label the X axis
+        let chartLabels = [];
+        dailyData.forEach((obj) => {
+          chartLabels.push(
+            moment(obj.readDate, "MM/DD/YYYY").format("ddd, MMM Do")
+          );
+        });
+
+        let charting = {
+          chartLabels: [],
+          daily: [],
+          avgDailyConsumption: [],
+          avgRemaining: [],
+        };
+        dailyData.forEach((obj) => {
+          charting.chartLabels.push(
+            moment(obj.readDate, "MM/DD/YYYY").format("ddd, MMM Do")
+          );
+          charting.daily.push(obj.energyDataKwh);
+          charting.avgDailyConsumption.push(obj.avgDailyConsumption);
+
+          charting.avgRemaining.push(avgDailyRemainingConsumption);
+        });
 
         return res.status(200).send({
           billingPeriod: {
             daysIntoPeriod: dailyData.length,
             lastDateWithData: lastDateWithData,
-            // daysToGoInPeriod: daysInPeriod - currentPeriodDailyData.length,
-            totalConsumption: totalConsumption,
+            totalConsumption: totalConsumption.toFixed(3),
             avgDailyConsumption: avgDailyConsumption,
-            avgEstReminingConsumption: avgEstReminingConsumption,
+            reminingConsumption: reminingConsumption,
           },
           dailyData: dailyData,
+          charting: charting,
         });
       })
       .catch((err) => console.log(err));

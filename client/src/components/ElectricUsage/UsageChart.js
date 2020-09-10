@@ -143,7 +143,7 @@ function UsageChart(props) {
         pointHoverBorderWidth: 2,
         pointRadius: 1,
         pointHitRadius: 10,
-        data: props.avgEstReminingConsumption,
+        data: props.avgRemaining,
       },
     ],
   };
