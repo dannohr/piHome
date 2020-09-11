@@ -44,18 +44,21 @@ const ElectricUsage = () => {
   }, [billingPeriod]);
 
   useEffect(() => {
-    async function fetchDateRange() {
-      await axios
-        .get("/api/electricMeter/perioddatarange/" + dataDate)
-        .then((response) => {
-          setBillingPeriod(response.data.billingPeriod);
-          console.log(response.data);
-        });
-    }
+    const interval = setInterval((fetchDateRange) => {
+      async function fetchDateRange() {
+        await axios
+          .get("/api/electricMeter/perioddatarange/" + dataDate)
+          .then((response) => {
+            setBillingPeriod(response.data.billingPeriod);
+            console.log(response.data);
+          });
+      }
 
-    fetchDateRange();
+      fetchDateRange();
+      console.log(dataDate);
+    }, 43200); //60 sec * 60 min * 12hr = 43,200
 
-    console.log(dataDate);
+    return () => clearInterval(interval);
   }, [dataDate]);
 
   return (
