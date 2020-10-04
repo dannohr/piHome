@@ -10,14 +10,21 @@ import "./ElectricUsage.css";
 const ElectricUsage = () => {
   const [billingPeriod, setBillingPeriod] = useState({});
   const [dailyData, setDailyData] = useState({});
-  // const [dataDate, setDataDate] = useState(moment().format("YYYY-MM-DD"));
-  const [dataDate, setDataDate] = useState("2020-09-08");
+  const [dataDate, setDataDate] = useState(moment().format("YYYY-MM-DD"));
   const [usedYesterday, setUsedyesterday] = useState(0);
-
   const [todayUsageSummary, setTodayUsageSummary] = useState({
     consumptionSoFarToday: 0,
     consumptionSoFarTodayAsOfTime: "1:10pm",
   });
+
+  async function fetchDateRange() {
+    await axios
+      .get("/api/electricMeter/perioddatarange/" + dataDate)
+      .then((response) => {
+        setBillingPeriod(response.data.billingPeriod);
+        console.log(response.data);
+      });
+  }
 
   useEffect(() => {
     console.log("trying to get daily");
@@ -44,19 +51,11 @@ const ElectricUsage = () => {
   }, [billingPeriod]);
 
   useEffect(() => {
-    const interval = setInterval((fetchDateRange) => {
-      async function fetchDateRange() {
-        await axios
-          .get("/api/electricMeter/perioddatarange/" + dataDate)
-          .then((response) => {
-            setBillingPeriod(response.data.billingPeriod);
-            console.log(response.data);
-          });
-      }
-
+    fetchDateRange();
+    const interval = setInterval(() => {
       fetchDateRange();
       console.log(dataDate);
-    }, 43200); //60 sec * 60 min * 12hr = 43,200
+    }, 3600000); //3,600,000ms = 1hr
 
     return () => clearInterval(interval);
   }, [dataDate]);
