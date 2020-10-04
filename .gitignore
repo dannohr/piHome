@@ -12,17 +12,5 @@
 # production
 /client/build
 
+api/config
 
-api/config/credentials.json
-api/config/config.json
-api/config/token.json
-api/config/oldtoken.json
-api/config/sequelizeConfig.js
-api/config/certs/cert.pem
-api/config/certs/privkey.pem
-api/cert/cert.pem
-api/cert/chain.pem
-api/cert/fullchain.pem
-api/cert/fullchain.pem.save
-api/cert/privkey.pem
-api/cert/README
