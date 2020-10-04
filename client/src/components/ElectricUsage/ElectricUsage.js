@@ -27,7 +27,7 @@ const ElectricUsage = () => {
   }
 
   useEffect(() => {
-    console.log("trying to get daily");
+    console.log("trying to get daily data for graph");
 
     async function fetchPeriodDailyData() {
       if (billingPeriod.billingStart) {
