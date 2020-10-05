@@ -193,6 +193,11 @@ module.exports = {
 
           charting.avgRemaining.push(avgDailyRemainingConsumption);
         });
+        console.log("");
+        console.log("the data is:");
+        console.log("");
+        console.log("");
+        console.log("");
 
         return res.status(200).send({
           billingPeriod: {
