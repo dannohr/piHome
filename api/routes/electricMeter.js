@@ -10,4 +10,6 @@ router.get(
 
 router.put("/perioddailydata", electricMeterDataCtrl.get_period_daily_data);
 
+router.get("/dailyUsage/:date", electricMeterDataCtrl.get_daily_usage);
+
 module.exports = router;

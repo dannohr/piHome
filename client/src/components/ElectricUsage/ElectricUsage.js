@@ -43,6 +43,18 @@ const ElectricUsage = () => {
           .then((response) => {
             console.log(response.data);
             setDailyData(response.data);
+
+            let yesterday = moment().add(-1, "days").format("MM/DD/YYYY");
+
+            let obj = response.data.dailyData.find(
+              (o) => o.readDate === "10/03/2020"
+            );
+
+            console.log(obj.energyDataKwh);
+
+            setUsedyesterday(obj.energyDataKwh);
+
+            console.log("yesterday is ", yesterday);
           });
       }
     }
