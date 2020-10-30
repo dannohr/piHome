@@ -503,4 +503,36 @@ module.exports = {
       return res.status(500).json({ error: error.message });
     }
   },
+
+  async get_onDemand_data(req, res, next) {
+    let today = moment().format("YYYY-MM-DD");
+
+    console.log("getting onDemand data");
+    console.log("today is: ", today);
+
+    // OnDemandReadRequest
+
+    const onDemandData = await db.OnDemandReadRequest.findAll({
+      where: {
+
+        id: {
+          [Op.gte]: 1,
+        },
+
+        // start date less than or equal to today
+        // start: {
+        //   [Op.lte]: dateToUse,
+        // },
+        // end date greater than or equal to today
+        // end: {
+        //   [Op.gte]: dateToUse,
+        // },
+      },
+      raw: true,
+    });
+
+    return res.status(200).send({ onDemandData })
+       
+    
+  },
 };

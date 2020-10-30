@@ -11,5 +11,6 @@ router.post("/meterdata", meterReaderCtrl.add_daily);
 router.put("/meterdata/:id", meterReaderCtrl.edit_daily);
 router.delete("/meterdata/:id", meterReaderCtrl.delete_daily);
 // router.get("/lastPeriod", meterReaderCtrl.get_last_period_daily_totals);
+router.get("/ondemand", meterReaderCtrl.get_onDemand_data);
 
 module.exports = router;
