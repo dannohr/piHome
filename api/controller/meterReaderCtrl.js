@@ -2,6 +2,18 @@ const db = require("../models/meterReader/index");
 const moment = require("moment");
 const { Op, literal } = require("sequelize");
 
+
+
+function replacer(i, val) {
+  if ( val === null ) 
+  { 
+     return ""; // change null to empty string
+  } else {
+     return val; // return unchanged
+  }
+ }
+
+
 module.exports = {
   async get_this_period_daily_totals(req, res, next) {
     // Look up beginning and end dates for current billing period
@@ -531,7 +543,9 @@ module.exports = {
       raw: true,
     });
 
-    return res.status(200).send({ onDemandData })
+    // replacer turns nulls to empy strings
+    return res.status(200).send(JSON.stringify(onDemandData, replacer))
+    
        
     
   },

@@ -27,11 +27,10 @@ class OnDemandTable extends React.Component {
           field: "registeredRead",
           title: "registeredRead"
         },
-        ,
-        // {
-        //   field: "readDate",
-        //   title: "readDate"
-        // }
+        {
+          field: "readDate",
+          title: "readDate"
+        }
       ],
       data: []
     };
@@ -46,8 +45,8 @@ class OnDemandTable extends React.Component {
       .get("/api/meterReader/ondemand")
       .then(response => {
         console.log("Data from Get All onDemand data Request:");
-        console.log(response.data);
-        this.setState({ data: response.data.onDemandData, isLoading: false });
+        console.log(response);
+        this.setState({ data: response.data, isLoading: false });
         console.log(this.state)
       })
       .catch(function(error) {
