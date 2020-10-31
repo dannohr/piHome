@@ -11,34 +11,44 @@ class OnDemandTable extends React.Component {
       isLoading: true,
       columns: [
         {
-          field: "meterDate",
-          title: "Read Date",
+          field: "id",
+          title: "id",
           defaultSort: "desc"
         },
         {
-          field: "consumption",
-          title: "kWh Used"
+          field: "correlationId",
+          title: "correlationId"
         },
         {
-          field: "id",
-          title: "id"
-        }
+          field: "statusReason",
+          title: "statusReason"
+        },
+        {
+          field: "registeredRead",
+          title: "registeredRead"
+        },
+        ,
+        // {
+        //   field: "readDate",
+        //   title: "readDate"
+        // }
       ],
       data: []
     };
   }
 
   componentDidMount() {
-    this.handleGetUsageData();
+    this.handleGetOnDemandData();
   }
 
-  handleGetUsageData() {
+  handleGetOnDemandData() {
     axios
-      .get("/api/meterReader/allDaily")
+      .get("/api/meterReader/ondemand")
       .then(response => {
-        console.log("Data from Get All Request:");
+        console.log("Data from Get All onDemand data Request:");
         console.log(response.data);
-        this.setState({ data: response.data, isLoading: false });
+        this.setState({ data: response.data.onDemandData, isLoading: false });
+        console.log(this.state)
       })
       .catch(function(error) {
         console.log(error);
@@ -94,6 +104,7 @@ class OnDemandTable extends React.Component {
     return (
       <div className="container">
         {this.state.isLoading ? null : (
+          // <p>Test</p>
           <DataTable
             data={this.state.data}
             columns={this.state.columns}
