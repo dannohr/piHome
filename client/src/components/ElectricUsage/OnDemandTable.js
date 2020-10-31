@@ -1,8 +1,8 @@
-import React from "react";
-import axios from "axios";
+import React from 'react';
+import axios from 'axios';
 // import moment from "moment";
-import DataTable from "../DataTable/DataTable";
-import "./DailyUsageTable.css";
+import DataTable from '../DataTable/DataTable';
+import './DailyUsageTable.css';
 
 class OnDemandTable extends React.Component {
   constructor(props) {
@@ -11,28 +11,28 @@ class OnDemandTable extends React.Component {
       isLoading: true,
       columns: [
         {
-          field: "id",
-          title: "id",
-          defaultSort: "desc"
+          field: 'id',
+          title: 'id',
+          defaultSort: 'desc',
         },
         {
-          field: "correlationId",
-          title: "correlationId"
+          field: 'correlationId',
+          title: 'correlationId',
         },
         {
-          field: "statusReason",
-          title: "statusReason"
+          field: 'statusReason',
+          title: 'statusReason',
         },
         {
-          field: "registeredRead",
-          title: "registeredRead"
+          field: 'registeredRead',
+          title: 'registeredRead',
         },
         {
-          field: "readDate",
-          title: "readDate"
-        }
+          field: 'readDate',
+          title: 'readDate',
+        },
       ],
-      data: []
+      data: [],
     };
   }
 
@@ -42,59 +42,59 @@ class OnDemandTable extends React.Component {
 
   handleGetOnDemandData() {
     axios
-      .get("/api/meterReader/ondemand")
-      .then(response => {
-        console.log("Data from Get All onDemand data Request:");
+      .get('/api/ondemand/ondemand')
+      .then((response) => {
+        console.log('Data from Get All onDemand data Request:');
         console.log(response);
         this.setState({ data: response.data, isLoading: false });
-        console.log(this.state)
+        console.log(this.state);
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log(error);
       });
   }
 
-  handleAddUsageData = body => {
-    console.log("adding data, body is:");
+  handleAddUsageData = (body) => {
+    console.log('adding data, body is:');
     console.log(body);
     axios
-      .post("/api/meterReader/meterdata", body)
-      .then(response => {
+      .post('/api/ondemand/ondemand', body)
+      .then((response) => {
         console.log(response);
-        this.handleGetUsageData();
+        this.handleGetOnDemandData();
         // this.setState({ data: response.data });
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log(error);
       });
   };
 
-  handleDeleteUsageData = id => {
-    console.log("starting to delete");
+  handleDeleteUsageData = (id) => {
+    console.log('starting to delete');
     console.log(id);
     axios
-      .delete("/api/meterReader/meterdata/" + id)
-      .then(response => {
+      .delete('/api/ondemand/ondemand/' + id)
+      .then((response) => {
         console.log(response);
-        this.handleGetUsageData();
+        this.handleGetOnDemandData();
         // this.setState({ isLoading: true });
 
         // this.setState({ data: response.data });
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log(error);
       });
   };
 
-  handleUpdateUsageData = body => {
+  handleUpdateUsageData = (body) => {
     let id = body.id;
     axios
-      .put("/api/meterReader/meterdata/" + id, body)
-      .then(response => {
+      .put('/api/ondemand/ondemand/' + id, body)
+      .then((response) => {
         console.log(response);
-        this.handleGetUsageData();
+        this.handleGetOnDemandData();
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log(error);
       });
   };
@@ -107,7 +107,7 @@ class OnDemandTable extends React.Component {
           <DataTable
             data={this.state.data}
             columns={this.state.columns}
-            title="Some Title"
+            title="On Demand Requests"
             handleDelete={this.handleDeleteUsageData}
             handleAdd={this.handleAddUsageData}
             handleUpdate={this.handleUpdateUsageData}
