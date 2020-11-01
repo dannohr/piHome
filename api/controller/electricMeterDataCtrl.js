@@ -118,7 +118,7 @@ module.exports = {
       requestorID: smtUserName,
       requesterType: "RES",
       startDate: startDate,
-      endDate: apiEndDate,
+        endDate: apiEndDate,
       // startDate: "10/01/2020",
       // endDate: "10/05/2020",
       reportFormat: "JSON",

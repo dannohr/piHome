@@ -15,6 +15,8 @@ function replacer(i, val) {
 
 
 module.exports = {
+
+
   async get_this_period_daily_totals(req, res, next) {
     // Look up beginning and end dates for current billing period
 

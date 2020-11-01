@@ -10,21 +10,12 @@ import "./ElectricUsage.css";
 const ElectricUsage = () => {
   const [billingPeriod, setBillingPeriod] = useState({});
   const [dailyData, setDailyData] = useState({});
-  const [dataDate, setDataDate] = useState(moment().format("YYYY-MM-DD"));
+  const [dataDate] = useState(moment().format("YYYY-MM-DD"));
   const [usedYesterday, setUsedyesterday] = useState(0);
-  const [todayUsageSummary, setTodayUsageSummary] = useState({
+  const [todayUsageSummary] = useState({
     consumptionSoFarToday: 0,
     consumptionSoFarTodayAsOfTime: "1:10pm",
   });
-
-  async function fetchDateRange() {
-    await axios
-      .get("/api/electricMeter/perioddatarange/" + dataDate)
-      .then((response) => {
-        setBillingPeriod(response.data.billingPeriod);
-        console.log(response.data);
-      });
-  }
 
   useEffect(() => {
     console.log("trying to get daily data for graph");
@@ -63,6 +54,15 @@ const ElectricUsage = () => {
   }, [billingPeriod]);
 
   useEffect(() => {
+    async function fetchDateRange() {
+      await axios
+        .get("/api/electricMeter/perioddatarange/" + dataDate)
+        .then((response) => {
+          setBillingPeriod(response.data.billingPeriod);
+          console.log(response.data);
+        });
+    }
+
     fetchDateRange();
     const interval = setInterval(() => {
       fetchDateRange();
