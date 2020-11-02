@@ -10,7 +10,7 @@ triggerOnDemandRead = () => {
       console.log(response.data);
       // this.setState({ data: response.data, isLoading: false });
       // console.log(this.state);
-      this.handleGetOnDemandData();
+      // this.handleGetOnDemandData();
     })
     .catch(function (error) {
       console.log(error);
