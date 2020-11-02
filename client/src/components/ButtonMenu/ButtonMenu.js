@@ -105,14 +105,14 @@ class ButtonMenu extends React.Component {
                       this.props.updateHeaderTitle("Electric Tracking")
                     }
                   >
-                    Electricty
+                    Electricity
                   </Typography>
                 }
               />
             </ListItem>
           </Link>
 
-          <Link component={RouterLink} to="/newelectricusage">
+          <Link component={RouterLink} to="/ondemandtable">
             <ListItem button key="9">
               <ListItemText
                 primary={
@@ -120,10 +120,10 @@ class ButtonMenu extends React.Component {
                     variant="h6"
                     style={menuItemStyle}
                     onClick={() =>
-                      this.props.updateHeaderTitle("Electric Tracking")
+                      this.props.updateHeaderTitle("On Demand Meter Reads")
                     }
                   >
-                    New Electricty
+                    On Demand
                   </Typography>
                 }
               />

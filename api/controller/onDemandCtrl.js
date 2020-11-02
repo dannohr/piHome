@@ -1,19 +1,21 @@
-const db = require('../models/meterReader/index');
-const moment = require('moment');
-const { Op, literal } = require('sequelize');
+const db = require("../models/meterReader/index");
+const moment = require("moment");
+const { Op, literal } = require("sequelize");
 
-const getDemandReadData = require('../util/requestOnDemandRead').getDemandReadData;
+const getDemandReadData = require("../util/requestOnDemandRead")
+  .getDemandReadData;
 
-const getLastOnDemandRequest = require('../util/requestOnDemandRead')
+const getLastOnDemandRequest = require("../util/requestOnDemandRead")
   .getLastOnDemandRequest;
 
-const requestOnDemandRead = require('../util/requestOnDemandRead').requestOnDemandRead;
+const requestOnDemandRead = require("../util/requestOnDemandRead")
+  .requestOnDemandRead;
 
-const delay = require('../util/requestOnDemandRead').delay;
+const delay = require("../util/requestOnDemandRead").delay;
 
 function replacer(i, val) {
   if (val === null) {
-    return ''; // change null to empty string
+    return ""; // change null to empty string
   } else {
     return val; // return unchanged
   }
@@ -21,18 +23,22 @@ function replacer(i, val) {
 
 module.exports = {
   async get_all(req, res, next) {
-    console.log('getting all on demand read');
+    console.log("getting all on demand read");
 
     try {
       const onDemandData = await db.OnDemandReadRequest.findAll({ raw: true });
 
       onDemandData.forEach((o) => {
         o.formattedDate = o.readDate
-          ? moment(o.readDate, 'YYYY-MM-DD HH:mm:s Z').format('hh:mm:ss a M/D/YYYY')
+          ? moment(o.readDate, "YYYY-MM-DD HH:mm:s Z").format(
+              "hh:mm:ss a M/D/YYYY"
+            )
           : null;
 
         o.requested = o.requestTime
-          ? moment(o.requestTime, 'YYYY-MM-DD HH:mm:s Z').format('h:m:s a M/D/YYYY')
+          ? moment(o.requestTime, "YYYY-MM-DD HH:mm:s Z").format(
+              "hh:mm:ss a M/D/YYYY"
+            )
           : null;
       });
 
@@ -44,8 +50,8 @@ module.exports = {
   },
 
   async add_onDemand(req, res, next) {
-    console.log('adding onDemand meter read');
-    console.log('Data is: ', req.body);
+    console.log("adding onDemand meter read");
+    console.log("Data is: ", req.body);
 
     try {
       const post = await db.OnDemandReadRequest.create(req.body);
@@ -59,8 +65,8 @@ module.exports = {
   },
 
   async delete_onDemand(req, res, next) {
-    console.log('Deleting onDemand Request');
-    console.log('Deleting ID: ', req.params.id);
+    console.log("Deleting onDemand Request");
+    console.log("Deleting ID: ", req.params.id);
 
     try {
       const del = await db.OnDemandReadRequest.destroy({
@@ -77,9 +83,9 @@ module.exports = {
   },
 
   async edit_onDemand(req, res, next) {
-    console.log('Editing onDemand meter read');
-    console.log('Editing ID: ', req.params.id);
-    console.log('The body is:');
+    console.log("Editing onDemand meter read");
+    console.log("Editing ID: ", req.params.id);
+    console.log("The body is:");
     console.log(req.body);
 
     try {
@@ -98,7 +104,7 @@ module.exports = {
   },
 
   async get_on_demand_read(req, res, next) {
-    console.log('getting new on demand read from SMT');
+    console.log("getting new on demand read from SMT");
 
     let priorOnDemandRead = {};
     let newOnDemandRead = {};
@@ -115,12 +121,12 @@ module.exports = {
       // the database.  This can happen if there's a long delay, or error, with the SMT API when the previous
       // read was requested
       if (!lastOnDemandRead.registeredRead) {
-        console.log('there is a pending read to get the data');
+        console.log("there is a pending read to get the data");
         priorOnDemandRead = await getDemandReadData(lastOnDemandRead);
         console.log(priorOnDemandRead);
       }
 
-      console.log('-----  All prior activity cleaned up, starting new  -----');
+      console.log("-----  All prior activity cleaned up, starting new  -----");
 
       // ------------------------------------------------------------------------------
       // let newEntry = {
@@ -150,9 +156,9 @@ module.exports = {
 
       //   // now that we've requested it, wait 30 seconds and try to get the data
       for (i = 1; i < 11; i++) {
-        console.log('try number ', i);
+        console.log("try number ", i);
         await delay(10000);
-        console.log('Waited 5s');
+        console.log("Waited 5s");
         newOnDemandReadData = await getDemandReadData(newOnDemandRead);
         if (newOnDemandReadData.odrRead.registeredRead) {
           i = 11;
