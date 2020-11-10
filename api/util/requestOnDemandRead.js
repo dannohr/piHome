@@ -133,6 +133,49 @@ const getDemandReadData = async (needRegisteredRead) => {
   }
 };
 
+const getManualReadDataByDate = async (readDate) => {
+  // console.log("");
+  // console.log("");
+  // console.log("");
+  // console.log("getting latest read for", readDate);
+  // console.log("");
+
+  const startOfDay = moment(readDate, "MM/DD/YYYY").local().startOf("day");
+
+  const endOfDay = moment(readDate, "MM/DD/YYYY").local().endOf("day");
+
+  // console.log("Start is:", startOfDay);
+  // console.log("  End is:", endOfDay);
+  // console.log("");
+  // console.log("");
+  // console.log("");
+
+  const yesterdayManualReads = await db.OnDemandReadRequest.findAll({
+    limit: 1,
+    attributes: ["readDate", "registeredRead"],
+    where: {
+      readDate: {
+        [Op.between]: [startOfDay, endOfDay],
+      },
+
+      // The read is not 0, (meaning there's valid data there)
+      registeredRead: {
+        [Op.not]: 0,
+      },
+    },
+    raw: true,
+    order: [["readDate", "DESC"]],
+  });
+
+  yesterdayManualReads.forEach((o) => {
+    o.formattedDate = o.readDate
+      ? moment(o.readDate, "YYYY-MM-DD HH:mm:s Z").format("hh:mm:ss a M/D/YYYY")
+      : null;
+  });
+  // console.log(yesterdayManualReads);
+  return yesterdayManualReads[0];
+};
+
 const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
 module.exports = {
@@ -140,4 +183,5 @@ module.exports = {
   getDemandReadData: getDemandReadData,
   getLastOnDemandRequest: getLastOnDemandRequest,
   delay: delay,
+  getManualReadDataByDate: getManualReadDataByDate,
 };

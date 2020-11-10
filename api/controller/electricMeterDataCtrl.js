@@ -5,6 +5,9 @@ const axios = require("axios");
 const fs = require("fs");
 const { Op, literal } = require("sequelize");
 
+const getManualReadDataByDate = require("../util/requestOnDemandRead")
+  .getManualReadDataByDate;
+
 const smtUrl = process.env.smtUrl;
 const smtUserName = process.env.smtUserName;
 const smtPassword = process.env.smtPassword;
@@ -37,7 +40,13 @@ const smtApiPost = async (body, site) => {
     });
 };
 
-const getYesterdayUsage = async () => {};
+const getYesterdayUsage = async (yesterday) => {
+  let someData = await getManualReadDataByDate(yesterday);
+  console.log("***");
+  console.log(someData);
+  console.log("***");
+  return someData;
+};
 
 module.exports = {
   async get_period_date_rage(req, res, next) {
@@ -47,7 +56,7 @@ module.exports = {
       ? moment(req.params.date).subtract(0, "days").format("YYYY-MM-DD")
       : moment();
 
-    console.log("Date using for lookup", dateToUse);
+    // console.log("Date using for lookup", dateToUse);
 
     const currentPeriod = await db.BillPeriod.findAll({
       where: {
@@ -63,9 +72,9 @@ module.exports = {
       raw: true,
     });
 
-    console.log("-----------------------------------------------");
-    console.log(currentPeriod);
-    console.log("-----------------------------------------------");
+    // console.log("-----------------------------------------------");
+    // console.log(currentPeriod);
+    // console.log("-----------------------------------------------");
 
     let periodStart = moment(currentPeriod[0].start).subtract(0, "days");
 
@@ -84,13 +93,13 @@ module.exports = {
 
     daysInPeriod = Math.round(daysInPeriod * 10) / 10;
 
-    console.log("Days in Period are:", daysInPeriod);
-    console.log(
-      "Dates ",
-      periodStart.format("MM-DD-YYYY"),
-      " through ",
-      periodEnd.format("MM-DD-YYYY")
-    );
+    // console.log("Days in Period are:", daysInPeriod);
+    // console.log(
+    //   "Dates ",
+    //   periodStart.format("MM-DD-YYYY"),
+    //   " through ",
+    //   periodEnd.format("MM-DD-YYYY")
+    // );
 
     return res.status(200).send({
       billingPeriod: {
@@ -124,16 +133,17 @@ module.exports = {
     };
     const responseData = await smtApiPost(body, "dailyreads/");
 
-    console.log(" -----> The response data is");
+    // console.log(" -----> The response data is");
     // console.log(responseData);
 
     // // Array of the daily meter read data
     let dailyData = responseData.registeredReads;
     daysIntoPeriod = dailyData.length;
-    console.log(dailyData);
+    // console.log(dailyData);
 
     let lastDateWithData = dailyData[dailyData.length - 1].readDate;
-    console.log(lastDateWithData);
+    // console.log("here is it");
+    // console.log(lastDateWithData);
 
     // // Sum the consumption between the starting and ending dates
     let totalConsumption = dailyData.reduce(function (a, b) {
@@ -207,22 +217,43 @@ module.exports = {
     // So first we'll look and see if it's available in dataData and use it if it is.
     // If it's not available, we'll have to calculate it from the manual reads.
 
-    let yesterday = moment().add(1, "days").format("MM/DD/YYYY");
+    let yesterday = moment().add(-1, "days").format("MM/DD/YYYY");
+    let dayBeforeYesterday = moment().add(-2, "days").format("MM/DD/YYYY");
 
-    let findYesterdayUsage = dailyData.find((o) => o.readDate === yesterday)
-      .energyDataKwh;
+    let findYesterdayData = dailyData.find((o) => o.readDate === yesterday);
+    console.log(findYesterdayData);
 
-    if (findYesterdayUsage) {
+    if (findYesterdayData.energyDataKwh) {
       // Yesterday's data is in dailyData, so use it
-      yesterdayUsage = findYesterdayUsage;
+      yesterdayUsage = findYesterdayData.energyDataKwh;
+      yesterdayLastRead = findYesterdayData.endReading;
+      yesterdayUsageReadTime = null;
     } else {
-      // Yesterday's data is not in dailyDailt so calculate it
-      yesterdayUsage = 999;
+      // Yesterday's data is not in dailyData so calculate it
+      // let yesterdayRead = await getYesterdayUsage(yesterday);
+      let yesterdayRead = await getManualReadDataByDate(yesterday);
+      // console.log(yesterdayRead);
+      yesterdayLastRead = yesterdayRead.registeredRead;
+
+      let dayBeforeYesterdayRead = dailyData.find(
+        (o) => o.readDate === dayBeforeYesterday
+      ).endReading;
+
+      yesterdayUsage = yesterdayLastRead - dayBeforeYesterdayRead;
+
+      yesterdayUsageReadTime = yesterdayRead.readDate;
     }
 
-    console.log("  ---");
-    console.log("Yesterday usage was", yesterdayUsage);
-    console.log("  ---");
+    // Now get usage so far today.  It will be the difference between the most current read and
+    // the ending read for yesterday (yesterdayRead)
+    let mostCurrentManualReading = await getManualReadDataByDate(
+      moment().format("MM/DD/YYYY")
+    );
+
+    console.log(mostCurrentManualReading);
+
+    todayUsage = mostCurrentManualReading.registeredRead - yesterdayLastRead;
+    todayUsageTime = mostCurrentManualReading.readDate;
 
     return res.status(200).send({
       billingPeriod: {
@@ -231,11 +262,14 @@ module.exports = {
         totalConsumption: totalConsumption.toFixed(3),
         avgDailyConsumption: avgDailyConsumption,
         reminingConsumption: reminingConsumption,
-        yesterdayUsage: yesterdayUsage,
-        todayUsage: 0,
+        yesterdayUsage: yesterdayUsage.toFixed(1),
+        yesterdayUsageReadTime: yesterdayUsageReadTime,
+        todayUsage: todayUsage.toFixed(1),
+        todayUsageTime: todayUsageTime,
       },
       dailyData: dailyData,
       charting: charting,
+      // testThis: testThis,
     });
   },
 

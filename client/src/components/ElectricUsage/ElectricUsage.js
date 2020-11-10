@@ -103,11 +103,15 @@ const ElectricUsage = () => {
         <div className="column right">
           <div className="linetwo">Today</div>
           <div className="headline">
-            {todayUsageSummary.consumptionSoFarToday} kWh
+            {dailyData.billingPeriod ? dailyData.billingPeriod.todayUsage : 0}{" "}
+            kWh
           </div>
           <div className="linetwo">
             {" "}
-            As of {todayUsageSummary.consumptionSoFarTodayAsOfTime}
+            As of{" "}
+            {dailyData.billingPeriod
+              ? moment(dailyData.billingPeriod.todayUsageTime).format("hh:mm a")
+              : null}
           </div>
         </div>
       </div>

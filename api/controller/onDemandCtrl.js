@@ -179,37 +179,56 @@ module.exports = {
   },
 
   async get_by_date(req, res, next) {
-    console.log("getting latest read for");
-    console.log(req.params.readDate);
+    console.log("");
+    console.log("");
+    console.log("");
+    console.log("getting latest read for", req.params.readDate);
+    console.log("");
 
-    const startOfDay = moment().startOf("day").format("YYYY-MM-DD hh:mm");
-    const endOfDay = moment().endOf("day").format("YYYY-MM-DD hh:mm");
+    const startOfDay = moment(req.params.readDate).local().startOf("day");
+    //.format("YYYY-MM-DD HH:mm");
+    const endOfDay = moment(req.params.readDate).local().endOf("day");
+    //.format("YYYY-MM-DD HH:mm");
 
     console.log("Start is:", startOfDay);
     console.log("  End is:", endOfDay);
+    console.log("");
+    console.log("");
+    console.log("");
 
     try {
-      const onDemandData = await db.OnDemandReadRequest.findAll({ raw: true });
+      const yesterdayManualReads = await db.OnDemandReadRequest.findAll({
+        limit: 1,
+        attributes: ["readDate", "registeredRead"],
+        where: {
+          readDate: {
+            [Op.between]: [startOfDay, endOfDay],
+          },
 
-      onDemandData.forEach((o) => {
+          // The read is not 0, (meaning there's valid data there)
+          registeredRead: {
+            [Op.not]: 0,
+          },
+        },
+        raw: true,
+        order: [["readDate", "DESC"]],
+      });
+
+      yesterdayManualReads.forEach((o) => {
         o.formattedDate = o.readDate
           ? moment(o.readDate, "YYYY-MM-DD HH:mm:s Z").format(
               "hh:mm:ss a M/D/YYYY"
             )
           : null;
-
-        o.requested = o.requestTime
-          ? moment(o.requestTime, "YYYY-MM-DD HH:mm:s Z").format(
-              "hh:mm:ss a M/D/YYYY"
-            )
-          : null;
       });
 
-      // replacer turns nulls to empy strings
-      // return res.status(200).send(JSON.stringify(onDemandData, replacer));
-      return res
-        .status(200)
-        .send({ startOfDate: startOfDay, endOfDay: endOfDay });
+      return res.status(200).send(
+        // startOfDate: startOfDay,
+        // endOfDay: endOfDay,
+        // numOfReads: yesterdayManualReads.length,
+        // yesterdayManualReads:
+        yesterdayManualReads[0]
+      );
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }
