@@ -11,7 +11,6 @@ const ElectricUsage = () => {
   const [billingPeriod, setBillingPeriod] = useState({});
   const [dailyData, setDailyData] = useState({});
   const [dataDate] = useState(moment().format("YYYY-MM-DD"));
-  const [usedYesterday, setUsedyesterday] = useState(0);
   const [todayUsageSummary] = useState({
     consumptionSoFarToday: 0,
     consumptionSoFarTodayAsOfTime: "1:10pm",
@@ -34,18 +33,6 @@ const ElectricUsage = () => {
           .then((response) => {
             console.log(response.data);
             setDailyData(response.data);
-
-            let yesterday = moment().add(-1, "days").format("MM/DD/YYYY");
-
-            let obj = response.data.dailyData.find(
-              (o) => o.readDate === "10/08/2020"
-            );
-
-            console.log(obj.energyDataKwh);
-
-            setUsedyesterday(obj.energyDataKwh);
-
-            console.log("yesterday is ", yesterday);
           });
       }
     }
@@ -77,7 +64,12 @@ const ElectricUsage = () => {
       <div className="row">
         <div className="column left">
           <div className="linetwo">Yesterday</div>
-          <div className="headline">{usedYesterday} kWh</div>
+          <div className="headline">
+            {dailyData.billingPeriod
+              ? dailyData.billingPeriod.yesterdayUsage
+              : 0}{" "}
+            kWh
+          </div>
           <div className="linetwo"> </div>
         </div>
 

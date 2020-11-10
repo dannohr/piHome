@@ -148,7 +148,7 @@ class ButtonMenu extends React.Component {
             </ListItem>
           </Link>
 
-          <Link component={RouterLink} to="/dailyusagetable">
+          {/* <Link component={RouterLink} to="/dailyusagetable">
             <ListItem button key="4">
               <ListItemText
                 primary={
@@ -163,7 +163,7 @@ class ButtonMenu extends React.Component {
                 }
               />
             </ListItem>
-          </Link>
+          </Link> */}
 
           <Link component={RouterLink} to="/outlet1">
             <ListItem button key="5">

@@ -37,6 +37,8 @@ const smtApiPost = async (body, site) => {
     });
 };
 
+const getYesterdayUsage = async () => {};
+
 module.exports = {
   async get_period_date_rage(req, res, next) {
     console.log(req.params.date);
@@ -200,12 +202,27 @@ module.exports = {
 
       charting.avgRemaining.push(avgDailyRemainingConsumption);
     });
-    console.log("");
-    console.log("the data is:");
 
-    console.log("");
-    console.log("");
-    console.log("");
+    // Find yesterday's usage.  Yesterday's usage doesn't show in the main api data until approx 3pm the next day.
+    // So first we'll look and see if it's available in dataData and use it if it is.
+    // If it's not available, we'll have to calculate it from the manual reads.
+
+    let yesterday = moment().add(1, "days").format("MM/DD/YYYY");
+
+    let findYesterdayUsage = dailyData.find((o) => o.readDate === yesterday)
+      .energyDataKwh;
+
+    if (findYesterdayUsage) {
+      // Yesterday's data is in dailyData, so use it
+      yesterdayUsage = findYesterdayUsage;
+    } else {
+      // Yesterday's data is not in dailyDailt so calculate it
+      yesterdayUsage = 999;
+    }
+
+    console.log("  ---");
+    console.log("Yesterday usage was", yesterdayUsage);
+    console.log("  ---");
 
     return res.status(200).send({
       billingPeriod: {
@@ -214,6 +231,8 @@ module.exports = {
         totalConsumption: totalConsumption.toFixed(3),
         avgDailyConsumption: avgDailyConsumption,
         reminingConsumption: reminingConsumption,
+        yesterdayUsage: yesterdayUsage,
+        todayUsage: 0,
       },
       dailyData: dailyData,
       charting: charting,

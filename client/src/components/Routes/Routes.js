@@ -10,9 +10,9 @@ import CalendarToolbar from "../Calendar/CalendarToolbar";
 import Weather from "../Weather/Weather";
 import NotFound from "../NotFound/NotFound";
 import ElectricUsage from "../ElectricUsage/ElectricUsage";
-import PeriodUsage from "../ElectricUsage/PeriodUsage";
+// import PeriodUsage from "../ElectricUsage/PeriodUsage";
 import MeterReadForm from "../MeterReadForm/MeterReadForm";
-import DailyUsageTable from "../ElectricUsage/DailyUsageTable";
+// import DailyUsageTable from "../ElectricUsage/DailyUsageTable";
 import OnDemandTable from "../ElectricUsage/OnDemandTable";
 
 export default ({ childProps }) => (
@@ -27,7 +27,7 @@ export default ({ childProps }) => (
     <Route path="/outlet1" component={Calendar} />
     <Route path="/outlet2" component={CalendarToolbar} />
     <Route path="/meterread" component={MeterReadForm} />
-    <Route path="/dailyusagetable" component={DailyUsageTable} />
+    {/* <Route path="/dailyusagetable" component={DailyUsageTable} /> */}
     <Route path="/ondemandtable" component={OnDemandTable} />
     {/* <Route path="/electricusage" component={PeriodUsage} />   OLD NOT USED ANYMORE*/}
 

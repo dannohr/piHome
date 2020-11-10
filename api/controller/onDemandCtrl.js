@@ -177,4 +177,41 @@ module.exports = {
       return res.status(500).json({ error: error.message });
     }
   },
+
+  async get_by_date(req, res, next) {
+    console.log("getting latest read for");
+    console.log(req.params.readDate);
+
+    const startOfDay = moment().startOf("day").format("YYYY-MM-DD hh:mm");
+    const endOfDay = moment().endOf("day").format("YYYY-MM-DD hh:mm");
+
+    console.log("Start is:", startOfDay);
+    console.log("  End is:", endOfDay);
+
+    try {
+      const onDemandData = await db.OnDemandReadRequest.findAll({ raw: true });
+
+      onDemandData.forEach((o) => {
+        o.formattedDate = o.readDate
+          ? moment(o.readDate, "YYYY-MM-DD HH:mm:s Z").format(
+              "hh:mm:ss a M/D/YYYY"
+            )
+          : null;
+
+        o.requested = o.requestTime
+          ? moment(o.requestTime, "YYYY-MM-DD HH:mm:s Z").format(
+              "hh:mm:ss a M/D/YYYY"
+            )
+          : null;
+      });
+
+      // replacer turns nulls to empy strings
+      // return res.status(200).send(JSON.stringify(onDemandData, replacer));
+      return res
+        .status(200)
+        .send({ startOfDate: startOfDay, endOfDay: endOfDay });
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
+  },
 };
