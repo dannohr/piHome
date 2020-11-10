@@ -110,7 +110,10 @@ const ElectricUsage = () => {
             {" "}
             As of{" "}
             {dailyData.billingPeriod
-              ? moment(dailyData.billingPeriod.todayUsageTime).format("hh:mm a")
+              ? moment(
+                  dailyData.billingPeriod.todayUsageTime,
+                  "YYYY-MM-DD HH:mm:s Z"
+                ).format("hh:mm a")
               : null}
           </div>
         </div>
