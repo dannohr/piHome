@@ -194,7 +194,6 @@ module.exports = {
     console.log("  End is:", endOfDay);
     console.log("");
     console.log("");
-    console.log("");
 
     try {
       const yesterdayManualReads = await db.OnDemandReadRequest.findAll({
