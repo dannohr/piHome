@@ -1,9 +1,9 @@
-const db = require("../models/meterReader/index");
-const moment = require("moment");
-const https = require("https");
-const axios = require("axios");
-const fs = require("fs");
-const { Op, literal } = require("sequelize");
+const db = require('../models/meterReader/index');
+const moment = require('moment');
+const https = require('https');
+const axios = require('axios');
+const fs = require('fs');
+const { Op, literal } = require('sequelize');
 
 const smtUrl = process.env.smtUrl;
 const smtUserName = process.env.smtUserName;
@@ -12,15 +12,15 @@ const smtEsiid = process.env.smtEsiid;
 
 const instance = axios.create({
   httpsAgent: new https.Agent({
-    cert: fs.readFileSync("./config/certs/cert.pem"),
-    key: fs.readFileSync("./config/certs/privkey.pem"),
+    cert: fs.readFileSync('./config/certs/cert.pem'),
+    key: fs.readFileSync('./config/certs/privkey.pem'),
     rejectUnauthorized: false,
   }),
 });
 
 const smtApiPost = async (body, site) => {
   return await instance({
-    method: "post",
+    method: 'post',
     url: smtUrl + site,
     data: body,
 
@@ -44,10 +44,10 @@ module.exports = {
     console.log(req.params.date);
 
     let dateToUse = req.params.date
-      ? moment(req.params.date).subtract(0, "days").format("YYYY-MM-DD")
+      ? moment(req.params.date).subtract(0, 'days').format('YYYY-MM-DD')
       : moment();
 
-    console.log("Date using for lookup", dateToUse);
+    console.log('Date using for lookup', dateToUse);
 
     const currentPeriod = await db.BillPeriod.findAll({
       where: {
@@ -63,39 +63,35 @@ module.exports = {
       raw: true,
     });
 
-    console.log("-----------------------------------------------");
+    console.log('-----------------------------------------------');
     console.log(currentPeriod);
-    console.log("-----------------------------------------------");
+    console.log('-----------------------------------------------');
 
-    let periodStart = moment(currentPeriod[0].start).subtract(0, "days");
+    let periodStart = moment(currentPeriod[0].start).subtract(0, 'days');
 
-    let periodEnd = moment(currentPeriod[0].end).subtract(0, "days");
+    let periodEnd = moment(currentPeriod[0].end).subtract(0, 'days');
 
     let daysInPeriod =
       moment
-        .duration(
-          moment(periodEnd, "YYYY-MM-DD").diff(
-            moment(periodStart, "YYYY-MM-DD")
-          )
-        )
+        .duration(moment(periodEnd, 'YYYY-MM-DD').diff(moment(periodStart, 'YYYY-MM-DD')))
         .asDays() + 1;
 
     // round to no decimal places, the following returned a non interger.  In October 2019 got 30.04 instead of 30 days
 
     daysInPeriod = Math.round(daysInPeriod * 10) / 10;
 
-    console.log("Days in Period are:", daysInPeriod);
+    console.log('Days in Period are:', daysInPeriod);
     console.log(
-      "Dates ",
-      periodStart.format("MM-DD-YYYY"),
-      " through ",
-      periodEnd.format("MM-DD-YYYY")
+      'Dates ',
+      periodStart.format('MM-DD-YYYY'),
+      ' through ',
+      periodEnd.format('MM-DD-YYYY')
     );
 
     return res.status(200).send({
       billingPeriod: {
-        billingStart: periodStart.format("YYYY-MM-DD"),
-        billingEnd: periodEnd.format("YYYY-MM-DD"),
+        billingStart: periodStart.format('YYYY-MM-DD'),
+        billingEnd: periodEnd.format('YYYY-MM-DD'),
         daysInPeriod: daysInPeriod,
       },
     });
@@ -106,25 +102,25 @@ module.exports = {
     // use today's date or the Smart Meter API will reject the request
     let startDate = req.body.data.startDate;
     let endDate = req.body.data.endDate;
-    let apiEndDate = !moment(endDate, "MM/DD/YYYY").isBefore(moment(), "day")
-      ? moment().format("MM/DD/YYYY")
+    let apiEndDate = !moment(endDate, 'MM/DD/YYYY').isBefore(moment(), 'day')
+      ? moment().format('MM/DD/YYYY')
       : endDate;
 
     let body = {
-      trans_id: "123",
+      trans_id: '123',
       requestorID: smtUserName,
-      requesterType: "RES",
+      requesterType: 'RES',
       startDate: startDate,
       endDate: apiEndDate,
-      reportFormat: "JSON",
-      version: "L",
-      readingType: "c",
+      reportFormat: 'JSON',
+      version: 'L',
+      readingType: 'c',
       esiid: [smtEsiid],
-      SMTTermsandConditions: "Y",
+      SMTTermsandConditions: 'Y',
     };
-    const responseData = await smtApiPost(body, "dailyreads/");
+    const responseData = await smtApiPost(body, 'dailyreads/');
 
-    console.log(" -----> The response data is");
+    console.log(' -----> The response data is');
     // console.log(responseData);
 
     // // Array of the daily meter read data
@@ -144,14 +140,14 @@ module.exports = {
     let reminingConsumption = Math.max(0, 1000 - totalConsumption).toFixed(3);
 
     // // Remaining days in the period, with no data provided by API
-    let numDaysMissingData = moment(endDate, "MM/DD/YYYY").diff(
-      moment(lastDateWithData, "MM/DD/YYYY"),
-      "days"
+    let numDaysMissingData = moment(endDate, 'MM/DD/YYYY').diff(
+      moment(lastDateWithData, 'MM/DD/YYYY'),
+      'days'
     );
 
-    let avgDailyRemainingConsumption = (
-      reminingConsumption / numDaysMissingData
-    ).toFixed(3);
+    let avgDailyRemainingConsumption = (reminingConsumption / numDaysMissingData).toFixed(
+      3
+    );
 
     // // Add average daily usage field to the existing data pulled from API
     dailyData.forEach((obj) => {
@@ -162,29 +158,25 @@ module.exports = {
     // // Using this to make sure we show a whole month at a time on the graph, and as days progress
     // // more of the month gets filled in.  Can graphically see how far into the month you are.
 
-    let dateToAdd = moment(lastDateWithData, "MM/DD/YYYY")
-      .add(1, "days")
-      .format("MM/DD/YYYY");
+    let dateToAdd = moment(lastDateWithData, 'MM/DD/YYYY')
+      .add(1, 'days')
+      .format('MM/DD/YYYY');
 
     // // Loop through and add the next date to the data set until you get to the last day of the period
-    while (moment(dateToAdd, "MM/DD/YYYY") <= moment(endDate, "MM/DD/YYYY")) {
+    while (moment(dateToAdd, 'MM/DD/YYYY') <= moment(endDate, 'MM/DD/YYYY')) {
       dailyData.push({
         readDate: dateToAdd,
         avgDailyRemainingConsumption: avgDailyRemainingConsumption,
         avgDailyConsumption: avgDailyConsumption,
       });
 
-      dateToAdd = moment(dateToAdd, "MM/DD/YYYY")
-        .add(1, "days")
-        .format("MM/DD/YYYY");
+      dateToAdd = moment(dateToAdd, 'MM/DD/YYYY').add(1, 'days').format('MM/DD/YYYY');
     }
 
     // // create an array of just the dates, to label the X axis
     let chartLabels = [];
     dailyData.forEach((obj) => {
-      chartLabels.push(
-        moment(obj.readDate, "MM/DD/YYYY").format("ddd, MMM Do")
-      );
+      chartLabels.push(moment(obj.readDate, 'MM/DD/YYYY').format('ddd, MMM Do'));
     });
 
     let charting = {
@@ -194,9 +186,7 @@ module.exports = {
       avgRemaining: [],
     };
     dailyData.forEach((obj) => {
-      charting.chartLabels.push(
-        moment(obj.readDate, "MM/DD/YYYY").format("ddd, MMM Do")
-      );
+      charting.chartLabels.push(moment(obj.readDate, 'MM/DD/YYYY').format('ddd, MMM Do'));
       charting.daily.push(obj.energyDataKwh);
       charting.avgDailyConsumption.push(obj.avgDailyConsumption);
 
@@ -207,7 +197,7 @@ module.exports = {
     // So first we'll look and see if it's available in dataData and use it if it is.
     // If it's not available, we'll have to calculate it from the manual reads.
 
-    let yesterday = moment().add(1, "days").format("MM/DD/YYYY");
+    let yesterday = moment().add(-1, 'days').format('MM/DD/YYYY');
 
     let findYesterdayUsage = dailyData.find((o) => o.readDate === yesterday)
       .energyDataKwh;
@@ -220,9 +210,9 @@ module.exports = {
       yesterdayUsage = 999;
     }
 
-    console.log("  ---");
-    console.log("Yesterday usage was", yesterdayUsage);
-    console.log("  ---");
+    console.log('  ---');
+    console.log('Yesterday usage was', yesterdayUsage);
+    console.log('  ---');
 
     return res.status(200).send({
       billingPeriod: {
