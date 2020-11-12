@@ -99,7 +99,7 @@ const ElectricUsage = () => {
             </div>
           )}
         </div>
-
+{/* some note */}
         <div className="column right">
           <div className="linetwo">Today</div>
           <div className="headline">
