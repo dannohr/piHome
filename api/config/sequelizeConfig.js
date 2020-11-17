@@ -24,7 +24,7 @@ module.exports = {
       // host: "192.168.1.101",
       // dialect: "postgres",
       // seederStorage: "sequelize",
-      // logging: false,
+      logging: false,
       // define: {
       //   //prevent sequelize from pluralizing table names
       //   freezeTableName: true

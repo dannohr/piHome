@@ -138,12 +138,56 @@ module.exports = {
 
     // // Array of the daily meter read data
     let dailyData = responseData.registeredReads;
+
+    // Find yesterday's usage.  Yesterday's usage doesn't show in the main api data until approx 3pm the next day.
+    // So first we'll look and see if it's available in dataData and use it if it is.
+    // If it's not available, we'll have to calculate it from the manual reads.
+
+    let yesterday = moment().add(-1, "days").format("MM/DD/YYYY");
+    let dayBeforeYesterday = moment().add(-2, "days").format("MM/DD/YYYY");
+    let yesterdayUsage = 0;
+    let yesterdayUsageReadTime = null;
+    let todayUsage = 0;
+    let todayUsageTime = null;
+
+    let findYesterdayData = dailyData.find((o) => o.readDate === yesterday);
+
+    console.log(findYesterdayData);
+
+    if (findYesterdayData) {
+      // Yesterday's data is in dailyData, so use it
+      yesterdayUsage = findYesterdayData.energyDataKwh;
+      yesterdayLastRead = findYesterdayData.endReading;
+      yesterdayUsageReadTime = null;
+    } else {
+      // Yesterday's data is not in dailyData so calculate it
+      // let yesterdayRead = await getYesterdayUsage(yesterday);
+      let yesterdayRead = await getManualReadDataByDate(yesterday);
+      console.log(yesterdayRead);
+      if (yesterdayRead) {
+        yesterdayLastRead = yesterdayRead.registeredRead;
+
+        let dayBeforeYesterdayRead = dailyData.find(
+          (o) => o.readDate === dayBeforeYesterday
+        ).endReading;
+
+        yesterdayUsage = yesterdayLastRead - dayBeforeYesterdayRead;
+        yesterdayUsageReadTime = yesterdayRead.readDate;
+
+        // now that we've calculated yesterday's total, add it to dailyData so it shows in the graph
+        // console.log(dailyData);
+        console.log("add", yesterdayUsage, "to dailyData for", yesterday);
+
+        dailyData.push({
+          readDate: yesterday,
+          energyDataKwh: yesterdayUsage.toFixed(3),
+        });
+      }
+    }
+
     daysIntoPeriod = dailyData.length;
-    // console.log(dailyData);
 
     let lastDateWithData = dailyData[dailyData.length - 1].readDate;
-    // console.log("here is it");
-    // console.log(lastDateWithData);
 
     // // Sum the consumption between the starting and ending dates
     let totalConsumption = dailyData.reduce(function (a, b) {
@@ -189,13 +233,16 @@ module.exports = {
         .format("MM/DD/YYYY");
     }
 
-    // // create an array of just the dates, to label the X axis
-    let chartLabels = [];
-    dailyData.forEach((obj) => {
-      chartLabels.push(
-        moment(obj.readDate, "MM/DD/YYYY").format("ddd, MMM Do")
-      );
-    });
+    // Now get usage so far today.  It will be the difference between the most current read and
+    // the ending read for yesterday (yesterdayRead)
+    let mostCurrentManualReading = await getManualReadDataByDate(
+      moment().format("MM/DD/YYYY")
+    );
+
+    if (mostCurrentManualReading) {
+      todayUsage = mostCurrentManualReading.registeredRead - yesterdayLastRead;
+      todayUsageTime = mostCurrentManualReading.readDate;
+    }
 
     let charting = {
       chartLabels: [],
@@ -203,6 +250,7 @@ module.exports = {
       avgDailyConsumption: [],
       avgRemaining: [],
     };
+
     dailyData.forEach((obj) => {
       charting.chartLabels.push(
         moment(obj.readDate, "MM/DD/YYYY").format("ddd, MMM Do")
@@ -212,48 +260,6 @@ module.exports = {
 
       charting.avgRemaining.push(avgDailyRemainingConsumption);
     });
-
-    // Find yesterday's usage.  Yesterday's usage doesn't show in the main api data until approx 3pm the next day.
-    // So first we'll look and see if it's available in dataData and use it if it is.
-    // If it's not available, we'll have to calculate it from the manual reads.
-
-    let yesterday = moment().add(-1, "days").format("MM/DD/YYYY");
-    let dayBeforeYesterday = moment().add(-2, "days").format("MM/DD/YYYY");
-
-    let findYesterdayData = dailyData.find((o) => o.readDate === yesterday);
-    console.log(findYesterdayData);
-
-    if (findYesterdayData.energyDataKwh) {
-      // Yesterday's data is in dailyData, so use it
-      yesterdayUsage = findYesterdayData.energyDataKwh;
-      yesterdayLastRead = findYesterdayData.endReading;
-      yesterdayUsageReadTime = null;
-    } else {
-      // Yesterday's data is not in dailyData so calculate it
-      // let yesterdayRead = await getYesterdayUsage(yesterday);
-      let yesterdayRead = await getManualReadDataByDate(yesterday);
-      // console.log(yesterdayRead);
-      yesterdayLastRead = yesterdayRead.registeredRead;
-
-      let dayBeforeYesterdayRead = dailyData.find(
-        (o) => o.readDate === dayBeforeYesterday
-      ).endReading;
-
-      yesterdayUsage = yesterdayLastRead - dayBeforeYesterdayRead;
-
-      yesterdayUsageReadTime = yesterdayRead.readDate;
-    }
-
-    // Now get usage so far today.  It will be the difference between the most current read and
-    // the ending read for yesterday (yesterdayRead)
-    let mostCurrentManualReading = await getManualReadDataByDate(
-      moment().format("MM/DD/YYYY")
-    );
-
-    console.log(mostCurrentManualReading);
-
-    todayUsage = mostCurrentManualReading.registeredRead - yesterdayLastRead;
-    todayUsageTime = mostCurrentManualReading.readDate;
 
     return res.status(200).send({
       billingPeriod: {
@@ -269,7 +275,6 @@ module.exports = {
       },
       dailyData: dailyData,
       charting: charting,
-      // testThis: testThis,
     });
   },
 
