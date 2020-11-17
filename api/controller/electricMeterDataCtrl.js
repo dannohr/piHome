@@ -156,8 +156,9 @@ module.exports = {
 
     if (findYesterdayData) {
       // Yesterday's data is in dailyData, so use it
-      yesterdayUsage = findYesterdayData.energyDataKwh;
+      yesterdayUsage = findYesterdayData.energyDataKwh * 1;
       yesterdayLastRead = findYesterdayData.endReading;
+      console.log("Yesterday usage is", yesterdayUsage);
       yesterdayUsageReadTime = null;
     } else {
       // Yesterday's data is not in dailyData so calculate it
