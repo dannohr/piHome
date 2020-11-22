@@ -10,9 +10,7 @@ import CalendarToolbar from "../Calendar/CalendarToolbar";
 import Weather from "../Weather/Weather";
 import NotFound from "../NotFound/NotFound";
 import ElectricUsage from "../ElectricUsage/ElectricUsage";
-// import PeriodUsage from "../ElectricUsage/PeriodUsage";
 import MeterReadForm from "../MeterReadForm/MeterReadForm";
-// import DailyUsageTable from "../ElectricUsage/DailyUsageTable";
 import OnDemandTable from "../ElectricUsage/OnDemandTable";
 
 export default ({ childProps }) => (

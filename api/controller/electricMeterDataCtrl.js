@@ -206,7 +206,7 @@ module.exports = {
 
     let avgDailyRemainingConsumption = (
       reminingConsumption / numDaysMissingData
-    ).toFixed(3);
+    ).toFixed(1);
 
     // // Add average daily usage field to the existing data pulled from API
     dailyData.forEach((obj) => {
@@ -273,6 +273,7 @@ module.exports = {
         yesterdayUsageReadTime: yesterdayUsageReadTime,
         todayUsage: todayUsage.toFixed(1),
         todayUsageTime: todayUsageTime,
+        avgDailyRemainingConsumption: avgDailyRemainingConsumption,
       },
       dailyData: dailyData,
       charting: charting,

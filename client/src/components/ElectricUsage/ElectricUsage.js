@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-// import ButtonChart from "../ButtonChart/ButtonChart";
 import UsageChart from "./UsageChart";
-// import PeriodUsage from "./PeriodUsage";
 import axios from "axios";
 import moment from "moment";
 
@@ -11,10 +9,10 @@ const ElectricUsage = () => {
   const [billingPeriod, setBillingPeriod] = useState({});
   const [dailyData, setDailyData] = useState({});
   const [dataDate] = useState(moment().format("YYYY-MM-DD"));
-  const [todayUsageSummary] = useState({
-    consumptionSoFarToday: 0,
-    consumptionSoFarTodayAsOfTime: "1:10pm",
-  });
+  // const [todayUsageSummary] = useState({
+  //   consumptionSoFarToday: 0,
+  //   consumptionSoFarTodayAsOfTime: "1:10pm",
+  // });
 
   useEffect(() => {
     console.log("trying to get daily data for graph");
@@ -63,14 +61,28 @@ const ElectricUsage = () => {
     <div>
       <div className="row">
         <div className="column left">
-          <div className="linetwo">Yesterday</div>
+          <div className="linetwo">Today</div>
+          <div className="headline">
+            {dailyData.billingPeriod ? dailyData.billingPeriod.todayUsage : 0}{" "}
+            kWh
+          </div>
+          <div className="linethree">
+            As of{" "}
+            {dailyData.billingPeriod
+              ? moment(
+                  dailyData.billingPeriod.todayUsageTime,
+                  "YYYY-MM-DD HH:mm:s Z"
+                ).format("hh:mm a")
+              : null}
+          </div>
+          {/* <div className="linetwo">Yesterday</div>
           <div className="headline">
             {dailyData.billingPeriod
               ? dailyData.billingPeriod.yesterdayUsage
               : 0}{" "}
             kWh
           </div>
-          <div className="linetwo"> </div>
+          <div className="linetwo"> </div> */}
         </div>
 
         <div className="column middle">
@@ -101,12 +113,29 @@ const ElectricUsage = () => {
         </div>
 
         <div className="column right">
-          <div className="linetwo">Today</div>
+          <div className="linetwo">Need to Use</div>
+          <div className="headline">
+            {dailyData.billingPeriod
+              ? dailyData.billingPeriod.avgDailyRemainingConsumption
+              : 0}{" "}
+            kWh
+          </div>
+          <div className="linethree">
+            {/* As of{" "}
+            {dailyData.billingPeriod
+              ? moment(
+                  dailyData.billingPeriod.todayUsageTime,
+                  "YYYY-MM-DD HH:mm:s Z"
+                ).format("hh:mm a")
+              : null} */}
+          </div>
+
+          {/* <div className="linetwo">Today</div>
           <div className="headline">
             {dailyData.billingPeriod ? dailyData.billingPeriod.todayUsage : 0}{" "}
             kWh
           </div>
-          <div className="linetwo">
+          <div className="linethree">
             As of{" "}
             {dailyData.billingPeriod
               ? moment(
@@ -114,7 +143,7 @@ const ElectricUsage = () => {
                   "YYYY-MM-DD HH:mm:s Z"
                 ).format("hh:mm a")
               : null}
-          </div>
+          </div> */}
         </div>
       </div>
       <div>
