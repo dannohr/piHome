@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import UsageChart from "./UsageChart";
 import axios from "axios";
 import moment from "moment";
+import Button from "@material-ui/core/Button";
 
 import "./ElectricUsage.css";
 
@@ -9,6 +10,7 @@ const ElectricUsage = () => {
   const [billingPeriod, setBillingPeriod] = useState({});
   const [dailyData, setDailyData] = useState({});
   const [dataDate] = useState(moment().format("YYYY-MM-DD"));
+  const [manualReadInProcess, setManualReadInprocess] = useState(false);
   // const [todayUsageSummary] = useState({
   //   consumptionSoFarToday: 0,
   //   consumptionSoFarTodayAsOfTime: "1:10pm",
@@ -57,12 +59,32 @@ const ElectricUsage = () => {
     return () => clearInterval(interval);
   }, [dataDate]);
 
+  // handleGetManualRead = () => {
+
+  function handleGetManualRead(e) {
+    setManualReadInprocess(true);
+    axios
+      .get("/api/ondemand/ondemandnewread")
+      .then((response) => {
+        console.log("");
+        console.log("Data from Get All onDemand data Request:");
+        console.log(response.data);
+        // this.setState({ data: response.data, isLoading: false });
+        // console.log(this.state);
+        setManualReadInprocess(false);
+        this.handleGetOnDemandData();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
   return (
     <div>
       <div className="row">
         <div className="column left">
-          <div className="linetwo">Today</div>
-          <div className="headline">
+          <div className="headline">Today</div>
+          <div className="linetwo">
             {dailyData.billingPeriod ? dailyData.billingPeriod.todayUsage : 0}{" "}
             kWh
           </div>
@@ -94,7 +116,7 @@ const ElectricUsage = () => {
 
           {dailyData.billingPeriod && (
             <div>
-              <div className="linetwo">
+              <div className="linethree">
                 {dailyData.billingPeriod.daysIntoPeriod} days into period,{" "}
                 {billingPeriod.daysInPeriod -
                   dailyData.billingPeriod.daysIntoPeriod}{" "}
@@ -113,14 +135,28 @@ const ElectricUsage = () => {
         </div>
 
         <div className="column right">
-          <div className="linetwo">Need to Use</div>
-          <div className="headline">
+          <div className="headline">Need to Use</div>
+          <div className="linetwo">
             {dailyData.billingPeriod
               ? dailyData.billingPeriod.avgDailyRemainingConsumption
               : 0}{" "}
             kWh
           </div>
           <div className="linethree">
+            {!manualReadInProcess ? (
+              <Button
+                variant="contained"
+                size="small"
+                color="primary"
+                onClick={() => {
+                  handleGetManualRead();
+                }}
+              >
+                Read Meter
+              </Button>
+            ) : (
+              <div className="inprocess">Read in Process</div>
+            )}
             {/* As of{" "}
             {dailyData.billingPeriod
               ? moment(

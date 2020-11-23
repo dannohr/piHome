@@ -37,7 +37,7 @@ td {
 }
 .linetwo {
   text-align: center;
-  font-size: 1em;
+  font-size: 1.25em;
   margin: 0;
 }
 .linethree {
@@ -68,13 +68,20 @@ td {
 
 .left,
 .right {
-  width: 17%;
+  width: 25%;
 }
 
 .middle {
-  width: 66%;
+  width: 50%;
 }
 
 .smalltext {
   margin: 0px;
+}
+
+.inprocess {
+  text-align: center;
+  font-size: 1em;
+  margin: 0;
+  color: red;
 }
