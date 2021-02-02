@@ -5,7 +5,8 @@ const axios = require("axios");
 const fs = require("fs");
 const { Op, literal } = require("sequelize");
 
-const getManualReadDataByDate = require("../util/requestOnDemandRead").getManualReadDataByDate;
+const getManualReadDataByDate = require("../util/requestOnDemandRead")
+  .getManualReadDataByDate;
 
 const smtUrl = process.env.smtUrl;
 const smtUserName = process.env.smtUserName;
@@ -75,13 +76,17 @@ module.exports = {
     // console.log(currentPeriod);
     // console.log("-----------------------------------------------");
 
-    let periodStart = moment(currentPeriod[0].start).subtract(0, "days");
+    let periodStart = moment(currentPeriod[0].start).subtract(1, "days");
 
-    let periodEnd = moment(currentPeriod[0].end).subtract(0, "days");
+    let periodEnd = moment(currentPeriod[0].end).subtract(1, "days");
 
     let daysInPeriod =
       moment
-        .duration(moment(periodEnd, "YYYY-MM-DD").diff(moment(periodStart, "YYYY-MM-DD")))
+        .duration(
+          moment(periodEnd, "YYYY-MM-DD").diff(
+            moment(periodStart, "YYYY-MM-DD")
+          )
+        )
         .asDays() + 1;
 
     // round to no decimal places, the following returned a non interger.  In October 2019 got 30.04 instead of 30 days
@@ -126,12 +131,10 @@ module.exports = {
       esiid: [smtEsiid],
       SMTTermsandConditions: "Y",
     };
-
-    console.log(body);
     const responseData = await smtApiPost(body, "dailyreads/");
 
-    console.log(" -----> The response data is");
-    console.log(responseData);
+    // console.log(" -----> The response data is");
+    // console.log(responseData);
 
     // // Array of the daily meter read data
     let dailyData = responseData.registeredReads;
@@ -146,9 +149,6 @@ module.exports = {
     let yesterdayUsageReadTime = null;
     let todayUsage = 0;
     let todayUsageTime = null;
-
-    console.log("daily data is");
-    console.log(dailyData);
 
     let findYesterdayData = dailyData.find((o) => o.readDate === yesterday);
 
@@ -168,8 +168,9 @@ module.exports = {
       if (yesterdayRead) {
         yesterdayLastRead = yesterdayRead.registeredRead;
 
-        let dayBeforeYesterdayRead = dailyData.find((o) => o.readDate === dayBeforeYesterday)
-          .endReading;
+        let dayBeforeYesterdayRead = dailyData.find(
+          (o) => o.readDate === dayBeforeYesterday
+        ).endReading;
 
         yesterdayUsage = yesterdayLastRead - dayBeforeYesterdayRead;
         yesterdayUsageReadTime = yesterdayRead.readDate;
@@ -203,7 +204,9 @@ module.exports = {
       "days"
     );
 
-    let avgDailyRemainingConsumption = (reminingConsumption / numDaysMissingData).toFixed(1);
+    let avgDailyRemainingConsumption = (
+      reminingConsumption / numDaysMissingData
+    ).toFixed(1);
 
     // // Add average daily usage field to the existing data pulled from API
     dailyData.forEach((obj) => {
@@ -214,7 +217,9 @@ module.exports = {
     // // Using this to make sure we show a whole month at a time on the graph, and as days progress
     // // more of the month gets filled in.  Can graphically see how far into the month you are.
 
-    let dateToAdd = moment(lastDateWithData, "MM/DD/YYYY").add(1, "days").format("MM/DD/YYYY");
+    let dateToAdd = moment(lastDateWithData, "MM/DD/YYYY")
+      .add(1, "days")
+      .format("MM/DD/YYYY");
 
     // // Loop through and add the next date to the data set until you get to the last day of the period
     while (moment(dateToAdd, "MM/DD/YYYY") <= moment(endDate, "MM/DD/YYYY")) {
@@ -224,12 +229,16 @@ module.exports = {
         avgDailyConsumption: avgDailyConsumption,
       });
 
-      dateToAdd = moment(dateToAdd, "MM/DD/YYYY").add(1, "days").format("MM/DD/YYYY");
+      dateToAdd = moment(dateToAdd, "MM/DD/YYYY")
+        .add(1, "days")
+        .format("MM/DD/YYYY");
     }
 
     // Now get usage so far today.  It will be the difference between the most current read and
     // the ending read for yesterday (yesterdayRead)
-    let mostCurrentManualReading = await getManualReadDataByDate(moment().format("MM/DD/YYYY"));
+    let mostCurrentManualReading = await getManualReadDataByDate(
+      moment().format("MM/DD/YYYY")
+    );
 
     if (mostCurrentManualReading) {
       todayUsage = mostCurrentManualReading.registeredRead - yesterdayLastRead;
@@ -244,7 +253,9 @@ module.exports = {
     };
 
     dailyData.forEach((obj) => {
-      charting.chartLabels.push(moment(obj.readDate, "MM/DD/YYYY").format("ddd, MMM Do"));
+      charting.chartLabels.push(
+        moment(obj.readDate, "MM/DD/YYYY").format("ddd, MMM Do")
+      );
       charting.daily.push(obj.energyDataKwh);
       charting.avgDailyConsumption.push(obj.avgDailyConsumption);
 
